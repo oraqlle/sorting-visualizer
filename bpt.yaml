@@ -7,4 +7,4 @@ version: 0.1.0
 readme: README.md
 
 description: |
-  The is the sorting-visualizer project. Hello!
+  A program for visualizing sorting algorithms

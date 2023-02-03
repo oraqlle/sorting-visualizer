@@ -5,6 +5,10 @@ cxx_compiler: 'g++'
 c_version: 'c18'
 cxx_version: 'c++20'
 
+flags: [
+  '-g'
+]
+
 link_flags: [
   '-lsfml-graphics',
   '-lsfml-window',
