@@ -8,6 +8,7 @@
 #include <iostream>
 #include <random>
 #include <thread>
+#include <tuple>
 #include <vector>
 #include <utility>
 
@@ -74,6 +75,16 @@ namespace sv
             , m_dist{ distribution_type{ element_type{}, m_max_value } }
         { }
 
+        constexpr auto
+        size() noexcept 
+            -> size_type
+        { return m_sort_amount; }
+
+        constexpr auto
+        max_value() noexcept 
+            -> element_type
+        { return m_max_value; }
+
         auto reset_counters() 
             noexcept -> void
         {
@@ -133,6 +144,12 @@ namespace sv
             std::this_thread::sleep_for(m_write_delay);
             m_items.at(idx) = value;
         }
+
+        constexpr auto 
+        silent_read(size_type idx) 
+            noexcept( noexcept(m_items.at(idx)) )
+            -> element_type&
+        { return m_items.at(idx); }
 
     private:
         float                       m_max_value;
