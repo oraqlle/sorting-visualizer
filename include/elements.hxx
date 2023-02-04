@@ -151,6 +151,10 @@ namespace sv
             -> element_type&
         { return m_items.at(idx); }
 
+        auto items() noexcept
+            -> std::vector<element_type>&
+        { return m_items; }
+
     private:
         float                       m_max_value;
         size_type                   m_sort_amount;

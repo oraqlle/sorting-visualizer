@@ -108,7 +108,7 @@ namespace sv
             noexcept -> void
         { std::fill(m_colours.begin() + fidx, m_colours.begin() + eidx, colour); }
 
-        auto mark_range(size_type fidx, size_type eidx, colour_type colour)
+        auto unmark_range(size_type fidx, size_type eidx)
             noexcept -> void
         { std::fill(m_colours.begin() + fidx, m_colours.begin() + eidx, colour_type::White); }
 

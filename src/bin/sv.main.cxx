@@ -1,83 +1,82 @@
 #include <SFML/Graphics.hpp>
 
+#include <elements.hxx>
+#include <sorter.hxx>
+#include <viewer.hxx>
+#include <algorithms/check.hxx>
+#include <algorithms/shuffle.hxx>
+#include <algorithms/bubblesort.hxx>
+
 #include <algorithm>
-#include <atomic>
 #include <chrono>
+#include <functional>
 #include <iostream>
-#include <numeric>
-#include <random>
-#include <ranges>
-#include <thread>
-#include <vector>
+#include <memory>
+#include <string>
+#include <unorderd_map>
+#include <utility>
 
 using namespace std::literals;
 
-template<std::input_iterator I, std::sentinel_for<I> S>
-void pancake_sort(I first, S last, long& current_pos)
-{
-    auto n { std::distance(first, last) };
-
-    for (; n > 0; --n)
-    {   
-        auto max_elem { std::max_element(first, std::next(first, n)) };
-        auto max_index { std::distance(first, max_elem) };
-        current_pos = max_index;
-
-        if (max_index != n)
-        {               
-            std::reverse(first, std::next(max_elem, 1));            
-            std::reverse(first, std::next(first, n));
-        }
-        std::this_thread::sleep_for(1s);
-    }
-}
+constexpr int width     = 1200;
+constexpr int height    = 940;
 
 auto main() -> int
 {
-
-    std::vector<float> v(100, 0.0);
-    std::ranges::generate(v, [&](){ return dist(eng); });
-
-    sf::RenderWindow window(sf::VideoMode(1200, 940), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(width, height), "SV - Sorter");
     window.setFramerateLimit(60);
-    auto [width, height] = window.getSize();
-    auto col_width { static_cast<float>(width) / static_cast<float>(v.size()) };
 
-    sf::RectangleShape rect(sf::Vector2f(col_width, 960.0f));
-    rect.setFillColor(sf::Color::White);
-    rect.setRotation(180);
+    auto map = sv::Sorter::map_type{
+        { "Check"s, std::pair{ 
+                "Checks if the array is sorted or not. Colors green for sorted blocks and red for unsorted block."s,
+                std::function{ sv::algorithms::check }
+            }},
+        { "Shuffle"s, std::pair{ 
+                "Shuffles the blocks into a random arrangement"s,
+                std::function{ sv::algorithms::shuffle }
+            }},
+        { "Bubble Sort"s, std::pair{ 
+                "Bubblesort O(n^2) | Reading:: Red"s,
+                std::function{ sv::algorithms::bubblesort }
+            }}
+    };
 
-    auto current_pos { 0L };
-    auto sorter = std::thread{ [&](){ pancake_sort(v.begin(), v.end(), current_pos); } };
+    auto elems = std::make_shared<sv::Elements>(
+        static_cast<sv::Elements::element_type>(height - 10),
+        100uL,
+        100ms,
+        100ms
+    );
+
+    auto viewer = std::make_shared<sv::Viewer>(
+        width,
+        height,
+        elems
+    );
+
+    auto sorter = sv::Sorter{
+        elems,
+        viewer,
+        map
+    };
 
     while (window.isOpen())
     {
-        sf::Event event;
+        auto event = sf::Event{};
         while (window.pollEvent(event))
         {
+            if (event.type == sf::Event::KeyEvent::)
+
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
         window.clear(sf::Color::Black);
 
-        std::ranges::for_each(v, [&, n=0](const auto& x) mutable
-            {
-                ((n == current_pos) ? rect.setFillColor(sf::Color::Red) 
-                                    : rect.setFillColor(sf::Color::White));
-
-                // rect.setFillColor(sf::Color::White);
-                rect.setPosition(static_cast<float>(n), static_cast<float>(height));
-                rect.setSize(sf::Vector2f(col_width, x));
-                window.draw(rect);
-                n += static_cast<int>(col_width);
-            }
-        );
+                
 
         window.display();
     }
-
-    sorter.join();
 
     return 0;
 }
