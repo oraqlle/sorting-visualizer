@@ -1,9 +1,9 @@
 #include <SFML/Graphics.hpp>
 
-#include <elements.hxx>
-#include <sorter.hxx>
-#include <viewer.hxx>
 #include <algorithms/bubblesort.hxx>
+#include <visualizer/elements.hxx>
+#include <visualizer/sorter.hxx>
+#include <visualizer/viewer.hxx>
 
 #include <algorithm>
 #include <chrono>

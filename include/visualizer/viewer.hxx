@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <elements.hxx>
+#include <visualizer/elements.hxx>
 
 #include <algorithm>
 #include <memory>

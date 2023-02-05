@@ -1,8 +1,8 @@
 #ifndef SV_SORTER
 #   define SV_SORTER
 
-#include <elements.hxx>
-#include <viewer.hxx>
+#include <visualizer/elements.hxx>
+#include <visualizer/viewer.hxx>
 
 #include <algorithm>
 #include <exception>

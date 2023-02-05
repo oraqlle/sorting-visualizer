@@ -3,9 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <elements.hxx>
-#include <sorter.hxx>
-#include <viewer.hxx>
+#include <visualizer/elements.hxx>
+#include <visualizer/sorter.hxx>
+#include <visualizer/viewer.hxx>
 
 namespace sv::algorithms
 {
