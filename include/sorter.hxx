@@ -62,9 +62,9 @@ namespace sv
             : m_elems{ elems }
             , m_viewer{ viewer }
             , m_algorithms{ alg_map }
-            , m_current_alg{ (*m_algorithms.begin()).first }
+            , m_current_alg{ ""s }
             , m_sorting{ false }
-            , m_sorted{ false }
+            , m_sorted{ true }
             , m_sorter{ std::thread{} }
         { }
 
@@ -119,38 +119,30 @@ namespace sv
             else
             {
                 auto alg_names = m_algorithms | std::views::keys;
-                throw std::out_of_range{
-                    "Could not find selected algorithm `"s
-                  + name + "`. "s
-                  + "Available algorithms are: \n{"
-                  + std::accumulate(
+                auto fmt_alg_names = std::accumulate(
                         alg_names.begin(),
                         alg_names.end(),
                         ""s,
                         [](const auto& x, const auto& y){ return x + ", "s + y; }
-                    )
-                  + "}\n"s
+                    ).substr(2);
+
+                throw std::out_of_range{
+                    "Could not find selected algorithm `"s
+                  + name + "`. "s
+                  + "Available algorithms are: \n{ "
+                  + fmt_alg_names
+                  + " }\n"s
                 };
             }
         }
 
         auto algorithm_name() 
-            -> std::optional<std::string>
-        {
-            auto alg { m_algorithms.find(m_current_alg) };
-
-            return (alg != m_algorithms.cend()) ? std::optional{ m_current_alg }
-                                                : std::nullopt;
-        }
+            -> std::string
+        { return m_current_alg; }
 
         auto algorithm_description() 
-            -> std::optional<std::string>
-        {
-            auto alg { m_algorithms.find(m_current_alg) };
-
-            return (alg != m_algorithms.cend()) ? std::optional{ alg->first }
-                                                : std::nullopt;
-        }
+            -> std::string
+        { return m_algorithms[m_current_alg].first; }
 
         constexpr auto 
         sorted() 

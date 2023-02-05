@@ -73,7 +73,17 @@ namespace sv
             , m_rd{ random_type{} }
             , m_eng{ random_engine_type{ m_rd() } }
             , m_dist{ distribution_type{ element_type{}, m_max_value } }
-        { }
+        { 
+            std::ranges::generate(
+                m_items,
+                [&, i=1]() mutable 
+                { 
+                    auto v = (static_cast<float>(i) * max_value) / static_cast<float>(sort_amount);
+                    i += 1;
+                    return v;
+                }
+            );
+        }
 
         constexpr auto
         size() noexcept 

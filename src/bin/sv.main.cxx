@@ -90,9 +90,13 @@ auto main() -> int
                     case sf::Keyboard::B:
                         sorter.select_algorithm("Bubble Sort"s);
                         break;
+
+                    case sf::Keyboard::A:
+                        sorter.select_algorithm("snhjss"s);
+                        break;
                     
                     default:
-                        std::clog << "No algorithm found";
+                        std::clog << "No algorithm bound to that key." << std::endl;
                 }
 
             if (event.type == sf::Event::Closed)
