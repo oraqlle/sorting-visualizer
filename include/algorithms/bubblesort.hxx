@@ -26,8 +26,6 @@ namespace sv::algorithms
 
                 viewer->unmark(j);
             }
-
-        sorter->sorting() = false;
     }
 
 }  /// namespace sv::algorithms

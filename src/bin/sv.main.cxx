@@ -3,8 +3,6 @@
 #include <elements.hxx>
 #include <sorter.hxx>
 #include <viewer.hxx>
-#include <algorithms/check.hxx>
-#include <algorithms/shuffle.hxx>
 #include <algorithms/bubblesort.hxx>
 
 #include <algorithm>
@@ -27,14 +25,6 @@ auto main() -> int
     window.setFramerateLimit(60);
 
     auto map = sv::Sorter::map_type{
-        { "Check"s, std::pair{ 
-                "Checks if the array is sorted or not. Colors green for sorted blocks and red for unsorted block."s,
-                sv::Sorter::function_type(sv::algorithms::check)
-            }},
-        { "Shuffle"s, std::pair{ 
-                "Shuffles the blocks into a random arrangement"s,
-                sv::Sorter::function_type(sv::algorithms::shuffle)
-            }},
         { "Bubble Sort"s, std::pair{ 
                 "Bubblesort O(n^2) | Reading:: Red"s,
                 sv::Sorter::function_type(sv::algorithms::bubblesort)
@@ -44,8 +34,8 @@ auto main() -> int
     auto elems = std::make_shared<sv::Elements>(
         static_cast<sv::Elements::element_type>(height - 10),
         100uL,
-        100ms,
-        100ms
+        10ms,
+        10ms
     );
 
     auto viewer = std::make_shared<sv::Viewer>(
@@ -90,13 +80,10 @@ auto main() -> int
                     case sf::Keyboard::B:
                         sorter.select_algorithm("Bubble Sort"s);
                         break;
-
-                    case sf::Keyboard::A:
-                        sorter.select_algorithm("snhjss"s);
-                        break;
                     
                     default:
                         std::clog << "No algorithm bound to that key." << std::endl;
+                        break;
                 }
 
             if (event.type == sf::Event::Closed)
