@@ -58,7 +58,15 @@ namespace sv
             , m_rects{ std::vector<rect_type>(elems->size(), rect_type{}) }
             , m_rect_width{ static_cast<float>(width) / static_cast<float>(elems->size()) }
         {
-            std::ranges::fill(m_rects, rect_type(sf::Vector2f(m_rect_width, 0.0f)));
+            std::ranges::fill(m_rects, rect_type(sf::Vector2f(m_rect_width - (m_rect_width * 0.1f), 0.0f)));
+            std::ranges::for_each(
+                m_rects,
+                [this](auto& r)
+                {   
+                    r.setOutlineThickness(m_rect_width * 0.1f);
+                    r.setOutlineColor(sf::Color::Black);
+                }
+            );
 
             m_texture.create(
                 static_cast<unsigned int>(m_window_width),
@@ -85,7 +93,7 @@ namespace sv
             {
                 auto h { m_elems->silent_read(i) };
 
-                m_rects.at(i).setSize(sf::Vector2f(m_rect_width, h));
+                m_rects.at(i).setSize(sf::Vector2f(m_rect_width - (m_rect_width * 0.1f), h));
                 m_rects.at(i).setPosition(
                     static_cast<float>(i) * m_rect_width,
                     static_cast<float>(m_window_height) - h
