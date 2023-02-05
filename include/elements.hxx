@@ -112,7 +112,7 @@ namespace sv
             auto a { this->read(x) };
             auto b { this->read(y) };
 
-            return std::less<>{}(a, b);
+            return std::less<>{}(b, a);
         }
 
         auto swap_elems(const size_type& x, const size_type& y)
