@@ -14,7 +14,7 @@
 
 namespace sv
 {
-    class Viewer
+    class Viewer : public sf::Sprite
     {
     public:
 
@@ -36,7 +36,10 @@ namespace sv
             , m_rects{ std::move(vw.m_rects) }
             , m_rect_width{ vw.m_rect_width }
         {
-            m_texture.create(m_window_width, m_window_height);
+            m_texture.create(
+                static_cast<unsigned int>(m_window_width),
+                static_cast<unsigned int>(m_window_height)
+            );
 
             vw.m_texture.clear();
             vw.m_rect_width = size_type{};
@@ -53,10 +56,15 @@ namespace sv
             , m_elems{ elems }
             , m_colours{ std::vector<colour_type>(elems->size(), colour_type::White) }
             , m_rects{ std::vector<rect_type>(elems->size(), rect_type{}) }
-            , m_rect_width{ static_cast<float>(width) / elems->size() }
+            , m_rect_width{ static_cast<float>(width) / static_cast<float>(elems->size()) }
         {
-            m_texture.create(m_window_width, m_window_height);
             std::ranges::fill(m_rects, rect_type(sf::Vector2f(m_rect_width, 0.0f)));
+
+            m_texture.create(
+                static_cast<unsigned int>(m_window_width),
+                static_cast<unsigned int>(m_window_height)
+            );
+            this->setTexture(m_texture.getTexture());
         }
 
         ~Viewer() noexcept
@@ -73,12 +81,15 @@ namespace sv
         {
             m_texture.clear();
 
-            for (auto i { 0uL }; m_rects.size(); ++i)
+            for (auto i { 0uL }; i < m_rects.size(); ++i)
             {
                 auto h { m_elems->silent_read(i) };
 
                 m_rects.at(i).setSize(sf::Vector2f(m_rect_width, h));
-                m_rects.at(i).setPosition(i * m_rect_width, m_window_height - h);
+                m_rects.at(i).setPosition(
+                    static_cast<float>(i) * m_rect_width,
+                    static_cast<float>(m_window_height) - h
+                );
                 m_rects.at(i).setFillColor(m_colours.at(i));
                 m_texture.draw(m_rects.at(i));
             }

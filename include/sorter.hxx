@@ -7,13 +7,13 @@
 #include <algorithm>
 #include <exception>
 #include <functional>
-#include <unordered_map>
 #include <memory>
 #include <optional>
 #include <ranges>
 #include <string>
 #include <string_view>
 #include <thread>
+#include <unordered_map>
 #include <utility>
 
 using namespace std::literals;
@@ -24,15 +24,17 @@ namespace sv
     {
     public:
 
+        using function_type = typename std::function<void(
+            std::shared_ptr<Elements>,
+            std::shared_ptr<Viewer>,
+            Sorter* sorter
+        )>;
+
         using map_type = typename std::unordered_map<
             std::string, 
             std::pair<
                 std::string,
-                std::function<void(
-                    std::shared_ptr<Elements>,
-                    std::shared_ptr<Viewer>,
-                    Sorter* sorter
-                )>
+                function_type
             >
         >;
 
@@ -60,7 +62,7 @@ namespace sv
             : m_elems{ elems }
             , m_viewer{ viewer }
             , m_algorithms{ alg_map }
-            , m_current_alg{ ""s }
+            , m_current_alg{ (*m_algorithms.begin()).first }
             , m_sorting{ false }
             , m_sorted{ false }
             , m_sorter{ std::thread{} }
@@ -132,7 +134,8 @@ namespace sv
             }
         }
 
-        auto algorithm_name() -> std::optional<std::string>
+        auto algorithm_name() 
+            -> std::optional<std::string>
         {
             auto alg { m_algorithms.find(m_current_alg) };
 
@@ -140,7 +143,8 @@ namespace sv
                                                 : std::nullopt;
         }
 
-        auto algorithm_description() -> std::optional<std::string>
+        auto algorithm_description() 
+            -> std::optional<std::string>
         {
             auto alg { m_algorithms.find(m_current_alg) };
 
@@ -149,9 +153,14 @@ namespace sv
         }
 
         constexpr auto 
-        set_sorted() 
+        sorted() 
             noexcept -> bool&
-        { return m_sorted }
+        { return m_sorted; }
+
+        constexpr auto 
+        sorting() 
+            noexcept -> bool&
+        { return m_sorting; }
 
     private:
         std::shared_ptr<Elements>   m_elems;

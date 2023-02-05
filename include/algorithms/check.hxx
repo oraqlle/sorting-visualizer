@@ -1,5 +1,5 @@
-#ifndef SV_ALGORITHMS_BUBBLE_SORT
-#   define SV_ALGORITHMS_BUBBLE_SORT
+#ifndef SV_ALGORITHMS_CHECK
+#   define SV_ALGORITHMS_CHECK
 
 #include <SFML/Graphics.hpp>
 
@@ -38,15 +38,16 @@ namespace sv::algorithms
             std::this_thread::sleep_for(2000.0ms / n);
         }
 
-        sorter->set_sorted() = (n == c) ? true : false;
+        sorter->sorted() = (n == c) ? true : false;
 
-        if (sorter->set_sorted())
+        if (sorter->sorted())
         {
             viewer->mark(n, sf::Color::Green);
             std::this_thread::sleep_for(500ms);
         }
+        sorter->sorting() = false;
     }
 
 }  /// namespace sv::algorithms
 
-#endif  // SV_ALGORITHMS_BUBBLE_SORT
+#endif  // SV_ALGORITHMS_CHECK

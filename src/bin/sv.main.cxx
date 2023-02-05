@@ -13,7 +13,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
-#include <unorderd_map>
+#include <unordered_map>
 #include <utility>
 
 using namespace std::literals;
@@ -29,15 +29,15 @@ auto main() -> int
     auto map = sv::Sorter::map_type{
         { "Check"s, std::pair{ 
                 "Checks if the array is sorted or not. Colors green for sorted blocks and red for unsorted block."s,
-                std::function{ sv::algorithms::check }
+                sv::Sorter::function_type(sv::algorithms::check)
             }},
         { "Shuffle"s, std::pair{ 
                 "Shuffles the blocks into a random arrangement"s,
-                std::function{ sv::algorithms::shuffle }
+                sv::Sorter::function_type(sv::algorithms::shuffle)
             }},
         { "Bubble Sort"s, std::pair{ 
                 "Bubblesort O(n^2) | Reading:: Red"s,
-                std::function{ sv::algorithms::bubblesort }
+                sv::Sorter::function_type(sv::algorithms::bubblesort)
             }}
     };
 
@@ -54,6 +54,8 @@ auto main() -> int
         elems
     );
 
+    viewer->setPosition(0.0f, 0.0f);
+
     auto sorter = sv::Sorter{
         elems,
         viewer,
@@ -65,16 +67,42 @@ auto main() -> int
         auto event = sf::Event{};
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::KeyEvent::)
+            if (event.type == sf::Event::KeyPressed)
+                switch (event.key.code)
+                {
+                    case sf::Keyboard::Escape:
+                        sorter.stop();
+                        // window.close();
+                        break;
+                    
+                    case sf::Keyboard::Enter:
+                        sorter.start();
+                        break;
+
+                    case sf::Keyboard::Space:
+                        sorter.select_algorithm("Shuffle"s);
+                        break;
+
+                    case sf::Keyboard::C:
+                        sorter.select_algorithm("Check"s);
+                        break;
+
+                    case sf::Keyboard::B:
+                        sorter.select_algorithm("Bubble Sort"s);
+                        break;
+                    
+                    default:
+                        std::clog << "No algorithm found";
+                }
 
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
+        viewer->render();
+
         window.clear(sf::Color::Black);
-
-                
-
+        window.draw(*viewer);
         window.display();
     }
 

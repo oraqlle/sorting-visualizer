@@ -13,16 +13,17 @@ namespace sv::algorithms
 {
     auto shuffle(
         std::shared_ptr<Elements> elems,
-        std::shared_ptr<Viewer> viewer,
+        [[maybe_unused]] std::shared_ptr<Viewer> viewer,
         Sorter* sorter
     ) -> void
     {
         auto rd     = std::random_device{};
-        auto eng    = std::default_random_engine{ rd() };
-        auto dist   = std::uniform_real_distribution<float>{ 0, elems->size() };
+        auto eng    =  std::mt19937{ rd() };
 
-        std::ranges::shuffle(elems->items(), dist(eng));
-        sorter->set_sorted() = false;
+        std::ranges::shuffle(elems->items(), eng);
+        sorter->sorted() = false;
+
+        sorter->sorting() = false;
     }
 
 }  /// namespace sv::algorithms

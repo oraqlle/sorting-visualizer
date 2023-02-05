@@ -145,8 +145,7 @@ namespace sv
             m_items.at(idx) = value;
         }
 
-        constexpr auto 
-        silent_read(size_type idx) 
+        auto silent_read(size_type idx) 
             noexcept( noexcept(m_items.at(idx)) )
             -> element_type&
         { return m_items.at(idx); }

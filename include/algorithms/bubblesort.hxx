@@ -12,7 +12,7 @@ namespace sv::algorithms
     auto bubblesort(
         std::shared_ptr<Elements> elems,
         std::shared_ptr<Viewer> viewer,
-        Sorter* sorter
+        [[maybe_unused]] Sorter* sorter
     ) -> void
     {
         auto n { elems->size() };
@@ -26,6 +26,8 @@ namespace sv::algorithms
 
                 viewer->unmark(j);
             }
+
+        sorter->sorting() = false;
     }
 
 }  /// namespace sv::algorithms
