@@ -70,7 +70,9 @@ namespace sv
 
         ~Sorter() noexcept
         {
-            m_sorter.detach();
+            if (m_sorter.joinable())
+                m_sorter.detach();
+
             m_sorted    = false;
             m_sorting   = false;
         }
@@ -102,7 +104,9 @@ namespace sv
         auto stop() noexcept -> void 
         {
             m_sorting = false;
-            m_sorter.detach();
+
+            if (m_sorter.joinable())
+                m_sorter.detach();
         }
 
         auto select_algorithm(const std::string& name) -> void

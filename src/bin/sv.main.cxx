@@ -62,7 +62,7 @@ auto main() -> int
                 {
                     case sf::Keyboard::Escape:
                         sorter.stop();
-                        // window.close();
+                        window.close();
                         break;
                     
                     case sf::Keyboard::Enter:
