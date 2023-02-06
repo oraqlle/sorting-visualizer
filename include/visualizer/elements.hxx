@@ -164,6 +164,26 @@ namespace sv
             -> std::vector<element_type>&
         { return m_items; }
 
+        auto counters() noexcept
+            -> decltype(auto)
+        { 
+            return std::forward_as_tuple(
+                m_cmp_counter,
+                m_read_counter,
+                m_write_counter,
+                m_swap_counter
+            );
+        }
+
+        auto delays() noexcept
+            -> decltype(auto)
+        { 
+            return std::forward_as_tuple(
+                m_read_delay,
+                m_write_delay
+            );
+        }
+
     private:
         float                       m_max_value;
         size_type                   m_sort_amount;

@@ -3,6 +3,7 @@
 #include <algorithms/bubblesort.hxx>
 #include <visualizer/elements.hxx>
 #include <visualizer/sorter.hxx>
+#include <visualizer/statusbar.hxx>
 #include <visualizer/viewer.hxx>
 
 #include <algorithm>
@@ -32,7 +33,7 @@ auto main() -> int
     };
 
     auto elems = std::make_shared<sv::Elements>(
-        static_cast<sv::Elements::element_type>(height - 10),
+        static_cast<sv::Elements::element_type>(height - (0.05f * height)),
         100uL,
         10ms,
         10ms
@@ -46,10 +47,17 @@ auto main() -> int
 
     viewer->setPosition(0.0f, 0.0f);
 
-    auto sorter = sv::Sorter{
+    auto sorter = std::make_shared<sv::Sorter>(
         elems,
         viewer,
         map
+    );
+
+    auto statusbar = sv::Statusbar{
+        width,
+        0.05f * height,
+        elems,
+        sorter
     };
 
     while (window.isOpen())
@@ -61,33 +69,33 @@ auto main() -> int
                 switch (event.key.code)
                 {
                     case sf::Keyboard::Escape:
-                        sorter.stop();
+                        sorter->stop();
                         window.close();
                         break;
                     
                     case sf::Keyboard::Enter:
-                        if (auto name { sorter.algorithm_name() }; (name != "Check"s) && (name != "Shuffle"s))
-                            sorter.start();
+                        if (auto name { sorter->algorithm_name() }; (name != "Check"s) && (name != "Shuffle"s))
+                            sorter->start();
                         break;
 
                     case sf::Keyboard::Space:
-                        if (!sorter.sorting())
+                        if (!sorter->sorting())
                         {
-                            sorter.select_algorithm("Shuffle"s);
-                            sorter.start();
+                            sorter->select_algorithm("Shuffle"s);
+                            sorter->start();
                         }
                         break;
 
                     case sf::Keyboard::C:
-                        if (!sorter.sorting())
+                        if (!sorter->sorting())
                         {
-                            sorter.select_algorithm("Check"s);
-                            sorter.start();
+                            sorter->select_algorithm("Check"s);
+                            sorter->start();
                         }
                         break;
 
                     case sf::Keyboard::B:
-                        sorter.select_algorithm("Bubble Sort"s);
+                        sorter->select_algorithm("Bubble Sort"s);
                         break;
                     
                     default:
@@ -100,9 +108,11 @@ auto main() -> int
         }
 
         viewer->render();
+        statusbar.render();
 
         window.clear(sf::Color::Black);
         window.draw(*viewer);
+        window.draw(statusbar);
         window.display();
     }
 

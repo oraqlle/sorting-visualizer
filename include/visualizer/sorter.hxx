@@ -114,7 +114,9 @@ namespace sv
 
                 if (!m_sorting)
                 {
-                    m_elems->reset_counters();
+                    if (m_current_alg != "Check"s && m_current_alg != "Shuffle"s)
+                        m_elems->reset_counters();
+
                     m_viewer->unmark_range(0uL, m_elems->size());
                 }
             }
@@ -170,7 +172,7 @@ namespace sv
             else if (m_current_alg == "Shuffle"s)
                 return "Shuffles the blocks into a random arrangement."s;
             else
-                m_algorithms[m_current_alg].first;
+                return m_algorithms[m_current_alg].first;
         }
 
         constexpr auto 
