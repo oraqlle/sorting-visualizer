@@ -90,10 +90,7 @@ namespace sv
                 m_sorting = true;
 
                 if (m_sorter.joinable())
-                {
                     m_sorter.join();
-                    m_sorting = false;
-                }
 
                 m_sorter = std::thread{ std::mem_fn(&Sorter::sort), this };
             }
@@ -180,6 +177,11 @@ namespace sv
         sorted() 
             noexcept -> bool&
         { return m_sorted; }
+
+        constexpr auto 
+        sorting() 
+            noexcept -> bool&
+        { return m_sorting; }
 
         auto check() -> void
         {

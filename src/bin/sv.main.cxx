@@ -66,15 +66,24 @@ auto main() -> int
                         break;
                     
                     case sf::Keyboard::Enter:
-                        sorter.start();
+                        if (auto name { sorter.algorithm_name() }; (name != "Check"s) && (name != "Shuffle"s))
+                            sorter.start();
                         break;
 
                     case sf::Keyboard::Space:
-                        sorter.select_algorithm("Shuffle"s);
+                        if (!sorter.sorting())
+                        {
+                            sorter.select_algorithm("Shuffle"s);
+                            sorter.start();
+                        }
                         break;
 
                     case sf::Keyboard::C:
-                        sorter.select_algorithm("Check"s);
+                        if (!sorter.sorting())
+                        {
+                            sorter.select_algorithm("Check"s);
+                            sorter.start();
+                        }
                         break;
 
                     case sf::Keyboard::B:
