@@ -143,7 +143,6 @@ namespace sv
         auto sort() noexcept
             -> void
         {
-            m_elems->reset_counters();
             m_viewer->unmark_range(0uL, m_elems->size());
 
             if (m_current_alg == "Check"s)
@@ -152,6 +151,7 @@ namespace sv
                 shuffle();
             else
             {
+                m_elems->reset_counters();
                 m_algorithms[m_current_alg].second(m_elems, m_viewer, this);
                 check();
                 /// Sound
