@@ -3,9 +3,12 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <visualizer/sound.hxx>
+
 #include <chrono>
 #include <functional>
 #include <iostream>
+#include <memory>
 #include <random>
 #include <thread>
 #include <tuple>
@@ -24,6 +27,7 @@ namespace sv
         using random_type           = std::random_device;
         using random_engine_type    = std::default_random_engine;
         using distribution_type     = std::uniform_real_distribution<float>;
+        using sound_type            = std::shared_ptr<sv::Sound>;
 
     public:
 
@@ -42,6 +46,7 @@ namespace sv
             , m_rd{ random_type{} }
             , m_eng{ std::move(elems.m_eng) }
             , m_dist{ std::move(elems.m_dist) }
+            , m_sfx{ std::move(elems.m_sfx) }
         {
             elems.m_max_value       = element_type{};
             elems.m_sort_amount     = size_type{};
@@ -53,13 +58,15 @@ namespace sv
             elems.m_write_delay     = duration_type{};
             elems.m_eng             = random_engine_type{};
             elems.m_dist            = distribution_type{};
+            elems.m_sfx             = sound_type{};
         }
 
         explicit Elements(
             element_type max_value,
             size_type sort_amount,
             duration_type read_delay,
-            duration_type write_delay
+            duration_type write_delay,
+            sound_type sound
         )
             : m_max_value{ max_value }
             , m_sort_amount{ sort_amount }
@@ -73,6 +80,7 @@ namespace sv
             , m_rd{ random_type{} }
             , m_eng{ random_engine_type{ m_rd() } }
             , m_dist{ distribution_type{ element_type{}, m_max_value } }
+            , m_sfx{ sound }
         { 
             std::ranges::generate(
                 m_items,
@@ -135,6 +143,7 @@ namespace sv
             }
 
             m_read_counter += size_type { 1 };
+            m_sfx->play(Sound::SFX_Option::READ, 0.5f + ((1 * m_items.at(idx)) / m_max_value));
             std::this_thread::sleep_for(m_read_delay);
             return m_items.at(idx);
         }
@@ -151,6 +160,7 @@ namespace sv
             }
 
             m_write_counter += size_type { 1 };
+            m_sfx->play(Sound::SFX_Option::WRITE, 0.5f + ((0.45f * m_items.at(idx)) / m_max_value));
             std::this_thread::sleep_for(m_write_delay);
             m_items.at(idx) = value;
         }
@@ -201,6 +211,8 @@ namespace sv
         random_type                 m_rd;
         random_engine_type          m_eng;
         distribution_type           m_dist;
+
+        sound_type                  m_sfx;
         
     };  /// class Elements
 

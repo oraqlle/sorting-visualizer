@@ -2,6 +2,7 @@
 #   define SV_SORTER
 
 #include <visualizer/elements.hxx>
+#include <visualizer/sound.hxx>
 #include <visualizer/viewer.hxx>
 
 #include <algorithm>
@@ -38,8 +39,6 @@ namespace sv
             >
         >;
 
-        // friend class std::function<void(Sorter*)>;
-
     public:
 
         Sorter() noexcept = default;
@@ -47,6 +46,7 @@ namespace sv
         Sorter(Sorter&& sorter) noexcept
             : m_elems{ std::move(sorter.m_elems) }
             , m_viewer{ std::move(sorter.m_viewer) }
+            , m_sfx{ std::move(sorter.m_sfx) }
             , m_algorithms{ std::move(sorter.m_algorithms) }
             , m_current_alg{ std::move(sorter.m_current_alg) }
             , m_sorting{ sorter.m_sorting }
@@ -57,10 +57,12 @@ namespace sv
         explicit Sorter(
             std::shared_ptr<Elements>& elems,
             std::shared_ptr<Viewer>& viewer,
+            std::shared_ptr<Sound>& sfx,
             map_type& alg_map
         ) noexcept
             : m_elems{ elems }
             , m_viewer{ viewer }
+            , m_sfx{ sfx }
             , m_algorithms{ alg_map }
             , m_current_alg{ ""s }
             , m_sorting{ false }
@@ -104,6 +106,8 @@ namespace sv
 
             if (m_sorter.joinable())
                 m_sorter.detach();
+
+            m_sfx->toggle_mute();
         }
 
         auto select_algorithm(const std::string& name) -> void
@@ -154,7 +158,7 @@ namespace sv
                 m_elems->reset_counters();
                 m_algorithms[m_current_alg].second(m_elems, m_viewer, this);
                 check();
-                /// Sound
+                m_sfx->stop();
             }
 
             m_sorting = false;
@@ -201,6 +205,7 @@ namespace sv
                     break;
                 }
 
+                m_sfx->play(Sound::SFX_Option::CHECK, 0.5f + (0.5f + (val / m_elems->max_value())));
                 m_viewer->mark(c + 1, sf::Color::Green);
                 std::this_thread::sleep_for(2000.0ms / n);
             }
@@ -211,7 +216,10 @@ namespace sv
             {
                 m_viewer->mark(n, sf::Color::Green);
                 std::this_thread::sleep_for(500ms);
+                m_sfx->play(Sound::SFX_Option::SORTED, 1);
             }
+            else
+                m_sfx->play(Sound::SFX_Option::NOT_SORTED, 1);
         }
 
         auto shuffle() -> void
@@ -226,6 +234,7 @@ namespace sv
     private:
         std::shared_ptr<Elements>   m_elems;
         std::shared_ptr<Viewer>     m_viewer;
+        std::shared_ptr<Sound>      m_sfx;
         map_type                    m_algorithms;
         std::string                 m_current_alg;
         bool                        m_sorting;
