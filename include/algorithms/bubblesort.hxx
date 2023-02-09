@@ -7,6 +7,9 @@
 #include <visualizer/sorter.hxx>
 #include <visualizer/viewer.hxx>
 
+#include <functional>
+#include <ranges>
+
 namespace sv::algorithms
 {
     auto bubblesort(
@@ -20,7 +23,7 @@ namespace sv::algorithms
             for (auto j { 0uL }; j < (n - i - 1uL); ++j)
             {
                 viewer->mark(j, sf::Color::Red);
-                if (elems->compare(j , j + 1uL))
+                if (elems->compare(j, j + 1uL, std::ranges::greater{}))
                     elems->swap_elems(j, j + 1uL);
 
                 viewer->unmark(j);

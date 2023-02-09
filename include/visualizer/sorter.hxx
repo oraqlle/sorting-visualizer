@@ -92,11 +92,8 @@ namespace sv
             if (m_sorting)
                 return;
 
-            if (
-                auto alg { m_algorithms.find(m_current_algorithm_name) };
-                alg != m_algorithms.cend() 
-             || m_current_algorithm_name == "Check"s || m_current_algorithm_name == "Shuffle"s
-            ) {
+            if (m_algorithms.find(m_current_algorithm_name) != m_algorithms.cend() || m_current_algorithm_name == "Check"s || m_current_algorithm_name == "Shuffle"s)
+            {   
                 m_sorting = true;
 
                 if (m_sorter.joinable())
@@ -183,8 +180,10 @@ namespace sv
                 return "Checks if the array is sorted or not. Colors green for sorted blocks and red for unsorted block."s;
             else if (m_current_algorithm_name == "Shuffle"s)
                 return "Shuffles the blocks into a random arrangement."s;
-            else
+            else if (auto alg { m_algorithms.find(m_current_algorithm_name) }; alg != m_algorithms.cend())
                 return m_algorithms[m_current_algorithm_name].first;
+            else
+                return ""s;
         }
 
         constexpr auto 

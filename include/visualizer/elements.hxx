@@ -123,7 +123,7 @@ namespace sv
             auto a { this->read(x) };
             auto b { this->read(y) };
 
-            return cmp(b, a);
+            return cmp(a, b);
         }
 
         auto swap_elems(const size_type& x, const size_type& y)
