@@ -129,7 +129,7 @@ namespace sv
         auto swap_elems(const size_type& x, const size_type& y)
             noexcept -> void
         {
-            m_swap_counter += size_type { 1 };
+            m_swap_counter += 1uL;
 
             auto a = this->read(x);
             this->write(x, this->read(y));
@@ -141,12 +141,12 @@ namespace sv
         {
             if (idx > m_sort_amount)
             {
-                std::clog << "Out of bound value: `" << idx << "` selected!";
+                std::clog << "Out of bound value: `" << idx << "` selected!" << std::endl;
                 return 0.0f;
             }
 
-            m_read_counter += size_type { 1 };
-            m_sfx->play(Sound::SFX_Option::READ, 0.5f + ((1 * m_items.at(idx)) / m_max_value));
+            m_read_counter += 1uL;
+            // m_sfx->play(Sound::SFX_Option::READ, 0.5f + ((1 * m_items.at(idx)) / m_max_value));
             std::this_thread::sleep_for(m_read_delay);
             return m_items.at(idx);
         }
@@ -162,8 +162,8 @@ namespace sv
                 return;
             }
 
-            m_write_counter += size_type { 1 };
-            m_sfx->play(Sound::SFX_Option::WRITE, 0.5f + ((0.45f * m_items.at(idx)) / m_max_value));
+            m_write_counter += 1uL;
+            // m_sfx->play(Sound::SFX_Option::WRITE, 0.5f + ((0.45f * m_items.at(idx)) / m_max_value));
             std::this_thread::sleep_for(m_write_delay);
             m_items.at(idx) = value;
         }

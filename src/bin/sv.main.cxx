@@ -2,6 +2,10 @@
 
 #include <algorithms/bubblesort.hxx>
 #include <algorithms/mergesort.hxx>
+#include <algorithms/quicksort.hxx>
+#include <algorithms/radixsort.hxx>
+#include <algorithms/insertionsort.hxx>
+#include <algorithms/selectionsort.hxx>
 
 #include <visualizer/elements.hxx>
 #include <visualizer/sorter.hxx>
@@ -36,9 +40,25 @@ auto main() -> int
                 "Bubblesort O(n^2) | Reading:: Red"s,
                 sv::algorithms::bubblesort
             }},
-        { "Merge Sort"s, std::pair{ 
+        { "Mergesort"s, std::pair{ 
                 "Mergesort O(nlog(n)) | Reading: Red | Writing: Blue | Left: Cyan | Right: Yellow"s,
                 sv::algorithms::mergesort
+            }},
+        { "Quicksort"s, std::pair{ 
+                "Quicksort O(nlog(n)) | Reading: Red | Swapping elements: Blue | Pivot: Green"s,
+                sv::algorithms::quicksort
+            }},
+        { "Radix Sort"s, std::pair{ 
+                "Radix Sort O(d*(n + b)) | Reading: Red | Writing: Blue | Finding Max: Yellow"s,
+                sv::algorithms::radixsort
+            }},
+        { "Insertion Sort"s, std::pair{ 
+                "Insertion Sort O(n^2) | Reading: Red | Writing: Blue"s,
+                sv::algorithms::insertionsort
+            }},
+        { "Selection Sort"s, std::pair{ 
+                "Selection Sort O(n^2) | Writing: Blue | Finding Min: Purple"s,
+                sv::algorithms::selectionsort
             }}
     };
 
@@ -121,7 +141,23 @@ auto main() -> int
                         break;
 
                     case sf::Keyboard::M:
-                        sorter->select_algorithm("Merge Sort"s);
+                        sorter->select_algorithm("Mergesort"s);
+                        break;
+
+                    case sf::Keyboard::Q:
+                        sorter->select_algorithm("Quicksort"s);
+                        break;
+                    
+                    case sf::Keyboard::R:
+                        sorter->select_algorithm("Radix Sort"s);
+                        break;
+
+                    case sf::Keyboard::I:
+                        sorter->select_algorithm("Insertion Sort"s);
+                        break;
+
+                    case sf::Keyboard::S:
+                        sorter->select_algorithm("Selection Sort"s);
                         break;
                     
                     default:

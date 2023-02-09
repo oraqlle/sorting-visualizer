@@ -112,7 +112,7 @@ namespace sv
             if (m_sorter.joinable())
                 m_sorter.detach();
 
-            m_sfx->toggle_mute();
+            // m_sfx->toggle_mute();
         }
 
         auto select_algorithm(const std::string& name) -> void
@@ -163,7 +163,7 @@ namespace sv
                 m_elems->reset_counters();
                 m_algorithms[m_current_algorithm_name].second(m_elems, m_viewer);
                 check();
-                m_sfx->stop();
+                // m_sfx->stop();
             }
 
             m_sorting = false;
@@ -212,7 +212,7 @@ namespace sv
                     break;
                 }
 
-                m_sfx->play(Sound::SFX_Option::CHECK, 0.5f + (0.5f + (val / m_elems->max_value())));
+                // m_sfx->play(Sound::SFX_Option::CHECK, 0.5f + (0.5f + (val / m_elems->max_value())));
                 m_viewer->mark(c + 1, sf::Color::Green);
                 std::this_thread::sleep_for(2000.0ms / n);
             }
@@ -223,10 +223,8 @@ namespace sv
             {
                 m_viewer->mark(n, sf::Color::Green);
                 std::this_thread::sleep_for(500ms);
-                m_sfx->play(Sound::SFX_Option::SORTED, 1);
+                // m_sfx->play(Sound::SFX_Option::SORTED, 1);
             }
-            else
-                m_sfx->play(Sound::SFX_Option::NOT_SORTED, 1);
         }
 
         auto shuffle() -> void

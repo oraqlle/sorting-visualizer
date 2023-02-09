@@ -16,33 +16,7 @@ namespace sv::algorithms
 {
     namespace
     {
-        auto merge_impl(
-            std::shared_ptr<Elements> elems,
-            std::shared_ptr<Viewer> viewer,
-            std::size_t first,
-            std::size_t middle,
-            std::size_t last
-        ) noexcept -> void;
-
-        auto mergesort_impl(
-            std::shared_ptr<Elements> elems,
-            std::shared_ptr<Viewer> viewer,
-            std::size_t first,
-            std::size_t last
-        ) noexcept -> void
-        {
-            if (first >= last)
-                return;
-
-            auto middle { (first + last) / 2uL };
-
-            mergesort_impl(elems, viewer, first, middle);
-            mergesort_impl(elems, viewer, middle + 1uL, last);
-
-            merge_impl(elems, viewer, first, middle, last);
-        }
-
-        auto merge_impl(
+        auto merge(
             std::shared_ptr<Elements> elems,
             std::shared_ptr<Viewer> viewer,
             std::size_t first,
@@ -121,6 +95,24 @@ namespace sv::algorithms
 
             viewer->unmark(first);
             viewer->unmark(last);
+        }
+
+        auto mergesort_impl(
+            std::shared_ptr<Elements> elems,
+            std::shared_ptr<Viewer> viewer,
+            std::size_t first,
+            std::size_t last
+        ) noexcept -> void
+        {
+            if (first >= last)
+                return;
+
+            auto middle { (first + last) / 2uL };
+
+            mergesort_impl(elems, viewer, first, middle);
+            mergesort_impl(elems, viewer, middle + 1uL, last);
+
+            merge(elems, viewer, first, middle, last);
         }
     }
 

@@ -15,7 +15,7 @@ namespace sv::algorithms
     auto bubblesort(
         std::shared_ptr<Elements> elems,
         std::shared_ptr<Viewer> viewer
-    ) -> void
+    ) noexcept -> void
     {
         auto n { elems->size() };
 
