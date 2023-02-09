@@ -21,17 +21,17 @@ using namespace std::literals;
 
 namespace sv
 {
-    class Sorter
+    class Sorter 
+        : public std::enable_shared_from_this<Sorter>
     {
     public:
 
-        using function_type = typename std::function<void(
-            std::shared_ptr<Elements>,
-            std::shared_ptr<Viewer>,
-            Sorter* sorter
+        using function_type = std::function<void(
+            std::shared_ptr<Elements> elems,
+            std::shared_ptr<Viewer> viewer
         )>;
 
-        using map_type = typename std::unordered_map<
+        using map_type = std::unordered_map<
             std::string, 
             std::pair<
                 std::string,
@@ -39,20 +39,9 @@ namespace sv
             >
         >;
 
-    public:
+    private:
 
         Sorter() noexcept = default;
-
-        Sorter(Sorter&& sorter) noexcept
-            : m_elems{ std::move(sorter.m_elems) }
-            , m_viewer{ std::move(sorter.m_viewer) }
-            , m_sfx{ std::move(sorter.m_sfx) }
-            , m_algorithms{ std::move(sorter.m_algorithms) }
-            , m_current_alg{ std::move(sorter.m_current_alg) }
-            , m_sorting{ sorter.m_sorting }
-            , m_sorted{ sorter.m_sorted }
-            , m_sorter{ std::move(sorter.m_sorter) }
-        { }
 
         explicit Sorter(
             std::shared_ptr<Elements>& elems,
@@ -64,11 +53,30 @@ namespace sv
             , m_viewer{ viewer }
             , m_sfx{ sfx }
             , m_algorithms{ alg_map }
-            , m_current_alg{ ""s }
+            , m_current_algorithm_name{ ""s }
             , m_sorting{ false }
             , m_sorted{ true }
             , m_sorter{ std::thread{} }
         { }
+
+    public:
+
+        [[nodiscard]] static std::shared_ptr<Sorter>
+        create(
+            std::shared_ptr<Elements>& elems,
+            std::shared_ptr<Viewer>& viewer,
+            std::shared_ptr<Sound>& sfx,
+            map_type& alg_map
+        ) noexcept
+        {
+            return std::shared_ptr<Sorter>(
+                new Sorter(elems, viewer, sfx, alg_map)
+            );
+        }
+
+        auto getptr() noexcept 
+            -> std::shared_ptr<Sorter>
+        { return shared_from_this(); }
 
         ~Sorter() noexcept
         {
@@ -85,9 +93,9 @@ namespace sv
                 return;
 
             if (
-                auto alg { m_algorithms.find(m_current_alg) };
+                auto alg { m_algorithms.find(m_current_algorithm_name) };
                 alg != m_algorithms.cend() 
-             || m_current_alg == "Check"s || m_current_alg == "Shuffle"s
+             || m_current_algorithm_name == "Check"s || m_current_algorithm_name == "Shuffle"s
             ) {
                 m_sorting = true;
 
@@ -114,11 +122,11 @@ namespace sv
         {
             if (m_algorithms.find(name) != m_algorithms.cend() || name == "Check"s || name == "Shuffle"s)
             {
-                m_current_alg = name;
+                m_current_algorithm_name = name;
 
                 if (!m_sorting)
                 {
-                    if (m_current_alg != "Check"s && m_current_alg != "Shuffle"s)
+                    if (m_current_algorithm_name != "Check"s && m_current_algorithm_name != "Shuffle"s)
                         m_elems->reset_counters();
 
                     m_viewer->unmark_range(0uL, m_elems->size());
@@ -149,14 +157,14 @@ namespace sv
         {
             m_viewer->unmark_range(0uL, m_elems->size());
 
-            if (m_current_alg == "Check"s)
+            if (m_current_algorithm_name == "Check"s)
                 check();
-            else if (m_current_alg == "Shuffle"s)
+            else if (m_current_algorithm_name == "Shuffle"s)
                 shuffle();
             else
             {
                 m_elems->reset_counters();
-                m_algorithms[m_current_alg].second(m_elems, m_viewer, this);
+                m_algorithms[m_current_algorithm_name].second(m_elems, m_viewer);
                 check();
                 m_sfx->stop();
             }
@@ -166,17 +174,17 @@ namespace sv
 
         auto algorithm_name() 
             -> std::string
-        { return m_current_alg; }
+        { return m_current_algorithm_name; }
 
         auto algorithm_description() 
             -> std::string
         { 
-            if (m_current_alg == "Check"s)
+            if (m_current_algorithm_name == "Check"s)
                 return "Checks if the array is sorted or not. Colors green for sorted blocks and red for unsorted block."s;
-            else if (m_current_alg == "Shuffle"s)
+            else if (m_current_algorithm_name == "Shuffle"s)
                 return "Shuffles the blocks into a random arrangement."s;
             else
-                return m_algorithms[m_current_alg].first;
+                return m_algorithms[m_current_algorithm_name].first;
         }
 
         constexpr auto 
@@ -236,7 +244,7 @@ namespace sv
         std::shared_ptr<Viewer>     m_viewer;
         std::shared_ptr<Sound>      m_sfx;
         map_type                    m_algorithms;
-        std::string                 m_current_alg;
+        std::string                 m_current_algorithm_name;
         bool                        m_sorting;
         bool                        m_sorted;
         std::thread                 m_sorter;

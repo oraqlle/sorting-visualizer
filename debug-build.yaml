@@ -12,5 +12,6 @@ flags: [
 link_flags: [
   '-lsfml-graphics',
   '-lsfml-window',
-  '-lsfml-system'
+  '-lsfml-system',
+  '-lsfml-audio'
 ]

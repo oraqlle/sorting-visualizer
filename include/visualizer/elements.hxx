@@ -6,6 +6,7 @@
 #include <visualizer/sound.hxx>
 
 #include <chrono>
+#include <concepts>
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -112,7 +113,9 @@ namespace sv
             m_swap_counter  = size_type{};
         }
 
-        auto compare(const size_type& x, const size_type& y)
+        template<std::copy_constructible F = std::ranges::less>
+            requires std::invocable<F&, size_type, size_type>
+        auto compare(const size_type& x, const size_type& y, F cmp = {})
             noexcept -> bool
         {
             m_cmp_counter += size_type{ 1 };
@@ -120,7 +123,7 @@ namespace sv
             auto a { this->read(x) };
             auto b { this->read(y) };
 
-            return std::less<>{}(b, a);
+            return cmp(b, a);
         }
 
         auto swap_elems(const size_type& x, const size_type& y)

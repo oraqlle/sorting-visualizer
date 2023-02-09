@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 
 #include <algorithms/bubblesort.hxx>
+#include <algorithms/mergesort.hxx>
+
 #include <visualizer/elements.hxx>
 #include <visualizer/sorter.hxx>
 #include <visualizer/statusbar.hxx>
@@ -32,7 +34,11 @@ auto main() -> int
     auto map = sv::Sorter::map_type{
         { "Bubble Sort"s, std::pair{ 
                 "Bubblesort O(n^2) | Reading:: Red"s,
-                sv::Sorter::function_type(sv::algorithms::bubblesort)
+                sv::algorithms::bubblesort
+            }},
+        { "Merge Sort"s, std::pair{ 
+                "Mergesort O(nlog(n)) | Reading: Red | Writing: Blue | Left: Cyan | Right: Yellow"s,
+                sv::algorithms::mergesort
             }}
     };
 
@@ -40,7 +46,7 @@ auto main() -> int
 
     auto elems = std::make_shared<sv::Elements>(
         static_cast<sv::Elements::element_type>(height - (0.05f * height)),
-        100uL,
+        200uL,
         10ms,
         10ms,
         sfx
@@ -54,7 +60,7 @@ auto main() -> int
 
     viewer->setPosition(0.0f, 0.0f);
 
-    auto sorter = std::make_shared<sv::Sorter>(
+    auto sorter = sv::Sorter::create(
         elems,
         viewer,
         sfx,
@@ -113,6 +119,10 @@ auto main() -> int
                     case sf::Keyboard::B:
                         sorter->select_algorithm("Bubble Sort"s);
                         break;
+
+                    case sf::Keyboard::M:
+                        sorter->select_algorithm("Merge Sort"s);
+                        break;
                     
                     default:
                         std::clog << "No algorithm bound to that key." << std::endl;
@@ -126,8 +136,6 @@ auto main() -> int
             }
         }
     }
-
-    std::this_thread::sleep_for(4s);
 
     return 0;
 }
