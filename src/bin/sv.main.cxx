@@ -1,10 +1,11 @@
 #include <SFML/Graphics.hpp>
 
 #include <algorithms/bubblesort.hxx>
+#include <algorithms/insertionsort.hxx>
 #include <algorithms/mergesort.hxx>
+#include <algorithms/pancakesort.hxx>
 #include <algorithms/quicksort.hxx>
 #include <algorithms/radixsort.hxx>
-#include <algorithms/insertionsort.hxx>
 #include <algorithms/selectionsort.hxx>
 
 #include <visualizer/elements.hxx>
@@ -57,8 +58,12 @@ auto main() -> int
                 sv::algorithms::insertionsort
             }},
         { "Selection Sort"s, std::pair{ 
-                "Selection Sort O(n^2) | Writing: Blue | Finding Min: Purple"s,
+                "Selection Sort O(n^2) | Writing: Blue | Finding Min: Yellow"s,
                 sv::algorithms::selectionsort
+            }},
+        { "Pancake Sort"s, std::pair{ 
+                "Pancake Sort O(n^2) | Reverse swap: Blue | Finding Max: Yellow"s,
+                sv::algorithms::pancakesort
             }}
     };
 
@@ -158,6 +163,10 @@ auto main() -> int
 
                     case sf::Keyboard::S:
                         sorter->select_algorithm("Selection Sort"s);
+                        break;
+
+                    case sf::Keyboard::P:
+                        sorter->select_algorithm("Pancake Sort"s);
                         break;
                     
                     default:
