@@ -28,13 +28,13 @@
 namespace fs = std::filesystem;
 using namespace std::literals;
 
-constexpr int width     = 1200;
-constexpr int height    = 940;
-
 auto main() -> int
 {
-    sf::RenderWindow window(sf::VideoMode(width, height), "SV - Sorter");
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SV - Sorter", sf::Style::Fullscreen);
     window.setFramerateLimit(60);
+    const auto [width, height] = static_cast<sf::Vector2f>(window.getSize());
+    const auto v_width { width - (width * 0.15f) };
+    const auto max_elements { v_width * (5.0f / 48.0f) };
 
     auto map = sv::Sorter::map_type{
         { "Bubble Sort"s, std::pair{ 
@@ -70,15 +70,15 @@ auto main() -> int
     auto sfx = std::make_shared<sv::Sound>();
 
     auto elems = std::make_shared<sv::Elements>(
-        static_cast<sv::Elements::element_type>(height - (0.05f * height)),
-        200uL,
+        height - (0.005f * height),
+        max_elements,
         10ms,
         10ms,
         sfx
     );
 
     auto viewer = std::make_shared<sv::Viewer>(
-        width,
+        v_width,
         height,
         elems
     );
@@ -93,11 +93,16 @@ auto main() -> int
     );
 
     auto statusbar = sv::Statusbar{
-        width,
-        0.05f * height,
+        width * 0.15f,
+        height,
+        // v_width,
+        // 0.0f,
         elems,
         sorter
     };
+
+    viewer->setPosition(0.0f, 0.0f);
+    statusbar.setPosition(v_width, 0.0f);
 
     while (window.isOpen())
     {

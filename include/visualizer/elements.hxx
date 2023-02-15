@@ -80,7 +80,7 @@ namespace sv
             , m_items{ std::vector<element_type>(m_sort_amount, element_type{}) }
             , m_rd{ random_type{} }
             , m_eng{ random_engine_type{ m_rd() } }
-            , m_dist{ distribution_type{ element_type{}, m_max_value } }
+            , m_dist{ distribution_type{ m_max_value * 0.1f, m_max_value } }
             , m_sfx{ sound }
         { 
             std::ranges::generate(
