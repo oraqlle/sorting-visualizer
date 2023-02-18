@@ -31,10 +31,10 @@ using namespace std::literals;
 auto main() -> int
 {
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SV - Sorter", sf::Style::Fullscreen);
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(120);
     const auto [width, height] = static_cast<sf::Vector2f>(window.getSize());
     const auto v_width { width - (width * 0.15f) };
-    const auto max_elements { v_width * (5.0f / 48.0f) };
+    const auto max_num_elements { static_cast<std::size_t>(v_width * (5.0f / 48.0f)) };
 
     auto map = sv::Sorter::map_type{
         { "Bubble Sort"s, std::tuple{
@@ -77,7 +77,7 @@ auto main() -> int
                 sv::algorithms::radixsort
             }},
         { "Insertion Sort"s, std::tuple{ 
-                "i"s,
+                "I"s,
                 std::vector{
                     " Time Complexity: O(n^2)"s,
                     " Reading: Red"s,
@@ -109,7 +109,7 @@ auto main() -> int
 
     auto elems = std::make_shared<sv::Elements>(
         height - (0.005f * height),
-        max_elements,
+        max_num_elements,
         10ms,
         10ms,
         sfx
@@ -133,7 +133,7 @@ auto main() -> int
     auto statusbar = sv::Statusbar{
         (width * 0.15f) - 10.0f,
         height,
-        12u,
+        14u,
         elems,
         sorter
     };
@@ -225,6 +225,20 @@ auto main() -> int
 
                     case sf::Keyboard::Left:
                         sorter->adjust_delay(0ms, -5ms);
+                        break;
+
+                    case sf::Keyboard::LBracket:
+                        if (auto csize { elems->size() }; csize != 0uL) [[likely]]
+                            sorter->resize(csize - 1uL);
+                        else
+                            std::clog << "The number of elements cannot be lower than 0!" << std::endl;
+                        break;
+
+                    case sf::Keyboard::RBracket:
+                        if (auto csize { elems->size() }; csize != max_num_elements) [[likely]]
+                            sorter->resize(csize + 1uL);
+                        else
+                            std::clog << "The number of elements cannot be higher than "<< max_num_elements << "!" << std::endl;
                         break;
                     
                     default:

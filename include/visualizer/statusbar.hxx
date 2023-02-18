@@ -83,8 +83,9 @@ namespace sv
         auto render() noexcept -> void
         {
             auto ss = std::stringstream{};
-            const auto& [cmps, reads, writes, swaps]        = m_elems->counters();
-            const auto& [rdelay, wdelay]                    = m_elems->delays();
+            const auto& [cmps, reads, writes, swaps]    = m_elems->counters();
+            const auto& [rdelay, wdelay, accdelay]      = m_elems->delays();
+            const auto& time                            = m_sorter->elapsed_time();
 
             ss << "Algorithm Details:\n"
                << " Current Algorithm: "  
@@ -98,6 +99,8 @@ namespace sv
             ss << "-------------------------------------------\n";
 
             ss << "Stats:\n"
+               << "Elapsed Time: "        << static_cast<float>(time.count()) / 1000.0f << " s\n"
+               << "True Sorting Time: "   << (time - accdelay).count() << " ms\n"
                << " Comparisons: "        << cmps << "\n"
                << " Read count: "         << reads << "\n"
                << " Write count: "        << writes << "\n"
@@ -112,14 +115,17 @@ namespace sv
                << " Commands:\n"
                << "  Start: Enter\n"
                << "  Exit: Esc\n"
-               << "  Read Delay:\n"
+               << "  Number of Elements Adjustment\n"
+               << "    Increase: \"]\"\n"
+               << "    Decrease: \"[\"\n"
+               << "  Reading Delay Adjustment:\n"
                << "    Increase: Up Arrow\n"
                << "    Decrease: Down Arrow\n"
-               << "  Write Delay:\n"
+               << "  Writing Delay Adjustment:\n"
                << "    Increase: Right Arrow\n"
                << "    Decrease: Left Arrow\n"
                << " Algorithms:\n"
-               << "  Check: c\n"
+               << "  Check: C\n"
                << "  Shuffle: Space\n";
 
             m_sorter->algorithm_keybinds(ss);            

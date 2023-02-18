@@ -31,7 +31,10 @@ namespace sv
     {
     public:
 
+        using size_type             = std::size_t;
         using duration_type         = std::chrono::milliseconds;
+        using clock_type            = std::chrono::high_resolution_clock;
+        using time_point_type       = std::chrono::time_point<clock_type>;
         using function_type         = std::function<void(
             std::shared_ptr<Elements> elems,
             std::shared_ptr<Viewer> viewer
@@ -59,9 +62,11 @@ namespace sv
             , m_viewer{ viewer }
             , m_sfx{ sfx }
             , m_algorithms{ alg_map }
-            , m_current_algorithm_name{ ""s }
+            , m_current_algorithm_name{ "N/A"s }
             , m_sorting{ false }
             , m_sorted{ true }
+            , m_start_time_point{ time_point_type{} }
+            , m_end_time_point{ time_point_type{} }
             , m_sorter{ std::thread{} }
         { }
 
@@ -99,8 +104,13 @@ namespace sv
                 return;
 
             if (m_algorithms.find(m_current_algorithm_name) != m_algorithms.cend() || m_current_algorithm_name == "Check"s || m_current_algorithm_name == "Shuffle"s)
-            {   
+            {
                 m_sorting = true;
+
+                m_start_time_point  = time_point_type{};
+                m_end_time_point    = time_point_type{};
+                auto&& [r, w, a]    = m_elems->delays();
+                a                   = duration_type{};
 
                 if (m_sorter.joinable())
                     m_sorter.join();
@@ -116,7 +126,7 @@ namespace sv
             m_sorting = false;
 
             if (m_sorter.joinable())
-                m_sorter.detach();
+                m_sorter.join();
 
             // m_sfx->toggle_mute();
         }
@@ -167,7 +177,9 @@ namespace sv
             else
             {
                 m_elems->reset_counters();
+                m_start_time_point = clock_type::now();
                 std::get<2>(m_algorithms[m_current_algorithm_name])(m_elems, m_viewer);
+                m_sorting = false;
                 check();
                 // m_sfx->stop();
             }
@@ -193,7 +205,15 @@ namespace sv
             else if (auto alg { m_algorithms.find(m_current_algorithm_name) }; alg != m_algorithms.cend())
                 return std::get<1>(m_algorithms[m_current_algorithm_name]);
             else
-                return std::vector{ "N/A"s };
+                return std::vector{ ""s };
+        }
+
+        auto elapsed_time() noexcept
+            -> duration_type
+        { 
+            if (m_sorting)
+                m_end_time_point = clock_type::now();
+            return std::chrono::duration_cast<duration_type>(m_end_time_point - m_start_time_point); 
         }
 
         auto algorithm_keybinds(std::stringstream& ss) 
@@ -213,10 +233,23 @@ namespace sv
         auto adjust_delay(duration_type rdelay, duration_type wdelay)
             noexcept -> void
         {
-            auto&& [rdd, wrd] = m_elems->delays();
+            auto&& [rdd, wrd, _] = m_elems->delays();
 
             rdd += rdelay;
             wrd += wdelay;
+
+            rdd = std::ranges::clamp(rdd, std::chrono::milliseconds::zero(), std::chrono::milliseconds::max());
+            wrd = std::ranges::clamp(wrd, std::chrono::milliseconds::zero(), std::chrono::milliseconds::max());
+        }
+
+        auto resize(size_type new_size)
+            noexcept -> void
+        {
+            if (!m_sorting)
+            {
+                m_elems->resize(new_size);
+                m_viewer->resize(new_size);
+            }
         }
 
         constexpr auto 
@@ -277,6 +310,8 @@ namespace sv
         std::string                 m_current_algorithm_name;
         bool                        m_sorting;
         bool                        m_sorted;
+        time_point_type             m_start_time_point;
+        time_point_type             m_end_time_point;
         std::thread                 m_sorter;
     };  /// Sorter
 
