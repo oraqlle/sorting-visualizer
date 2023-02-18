@@ -10,12 +10,16 @@
 #include <functional>
 #include <memory>
 #include <optional>
+#include <random>
 #include <ranges>
+#include <sstream>
 #include <string>
 #include <string_view>
 #include <thread>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
+#include <vector>
 
 using namespace std::literals;
 
@@ -32,10 +36,11 @@ namespace sv
         )>;
 
         using map_type = std::unordered_map<
-            std::string, 
-            std::pair<
-                std::string,
-                function_type
+            std::string,                        /// Algorithm name
+            std::tuple<
+                std::string,                    /// Keybinding
+                std::vector<std::string>,       /// Details
+                function_type                   /// Algorithm Implementation
             >
         >;
 
@@ -161,7 +166,7 @@ namespace sv
             else
             {
                 m_elems->reset_counters();
-                m_algorithms[m_current_algorithm_name].second(m_elems, m_viewer);
+                std::get<2>(m_algorithms[m_current_algorithm_name])(m_elems, m_viewer);
                 check();
                 // m_sfx->stop();
             }
@@ -173,17 +178,35 @@ namespace sv
             -> std::string
         { return m_current_algorithm_name; }
 
-        auto algorithm_description() 
-            -> std::string
+        auto algorithm_details() 
+            -> std::vector<std::string>
         { 
             if (m_current_algorithm_name == "Check"s)
-                return "Checks if the array is sorted or not. Colors green for sorted blocks and red for unsorted block."s;
+                return std::vector{ 
+                    " Description: Checks if the array is\n sorted or not."s,
+                    " Sorted: Green"s,
+                    " Unsorted: Red"s
+                };
             else if (m_current_algorithm_name == "Shuffle"s)
-                return "Shuffles the blocks into a random arrangement."s;
+                return std::vector{ " Description: Shuffles the blocks into\n a random arrangement."s };
             else if (auto alg { m_algorithms.find(m_current_algorithm_name) }; alg != m_algorithms.cend())
-                return m_algorithms[m_current_algorithm_name].first;
+                return std::get<1>(m_algorithms[m_current_algorithm_name]);
             else
-                return ""s;
+                return std::vector{ "N/A"s };
+        }
+
+        auto algorithm_keybinds(std::stringstream& ss) 
+            -> void
+        {
+            std::ranges::copy(
+                m_algorithms | std::views::transform([](const auto& kvs)
+                {
+                    auto& [k, vs] = kvs;
+
+                    return "  "s + k + ": " + std::get<0>(vs);
+                }),
+                std::ostream_iterator<std::string>(ss, "\n")
+            );
         }
 
         constexpr auto 

@@ -10,7 +10,6 @@
 #include <functional>
 #include <iostream>
 #include <memory>
-#include <random>
 #include <thread>
 #include <tuple>
 #include <vector>
@@ -25,9 +24,6 @@ namespace sv
         using element_type          = float;
         using size_type             = std::size_t;
         using duration_type         = std::chrono::milliseconds;
-        using random_type           = std::random_device;
-        using random_engine_type    = std::default_random_engine;
-        using distribution_type     = std::uniform_real_distribution<float>;
         using sound_type            = std::shared_ptr<sv::Sound>;
 
     public:
@@ -44,9 +40,6 @@ namespace sv
             , m_read_delay{ elems.m_read_delay }
             , m_write_delay{ elems.m_write_delay }
             , m_items{ std::move(elems.m_items) }
-            , m_rd{ random_type{} }
-            , m_eng{ std::move(elems.m_eng) }
-            , m_dist{ std::move(elems.m_dist) }
             , m_sfx{ std::move(elems.m_sfx) }
         {
             elems.m_max_value       = element_type{};
@@ -57,8 +50,6 @@ namespace sv
             elems.m_swap_counter    = size_type{};
             elems.m_read_delay      = duration_type{};
             elems.m_write_delay     = duration_type{};
-            elems.m_eng             = random_engine_type{};
-            elems.m_dist            = distribution_type{};
             elems.m_sfx             = sound_type{};
         }
 
@@ -78,9 +69,6 @@ namespace sv
             , m_read_delay{ read_delay }
             , m_write_delay{ write_delay }
             , m_items{ std::vector<element_type>(m_sort_amount, element_type{}) }
-            , m_rd{ random_type{} }
-            , m_eng{ random_engine_type{ m_rd() } }
-            , m_dist{ distribution_type{ m_max_value * 0.1f, m_max_value } }
             , m_sfx{ sound }
         { 
             std::ranges::generate(
@@ -210,10 +198,6 @@ namespace sv
         duration_type               m_write_delay;
 
         std::vector<element_type>   m_items;
-
-        random_type                 m_rd;
-        random_engine_type          m_eng;
-        distribution_type           m_dist;
 
         sound_type                  m_sfx;
         

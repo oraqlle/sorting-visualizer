@@ -37,32 +37,70 @@ auto main() -> int
     const auto max_elements { v_width * (5.0f / 48.0f) };
 
     auto map = sv::Sorter::map_type{
-        { "Bubble Sort"s, std::pair{ 
-                "Bubblesort O(n^2) | Reading:: Red"s,
+        { "Bubble Sort"s, std::tuple{
+                "b"s,
+                std::vector{ 
+                    " Time Complexity: O(n^2)"s,
+                    " Reading: Red"s 
+                },
                 sv::algorithms::bubblesort
             }},
-        { "Mergesort"s, std::pair{ 
-                "Mergesort O(nlog(n)) | Reading: Red | Writing: Blue | Left: Cyan | Right: Yellow"s,
+        { "Mergesort"s, std::tuple{ 
+                "m"s,
+                std::vector{ 
+                    " Time Complexity: O(nlog(n))"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s,
+                    " Left Bound: Cyan"s,
+                    " Right Bound: Yellow"s
+                },
                 sv::algorithms::mergesort
             }},
-        { "Quicksort"s, std::pair{ 
-                "Quicksort O(nlog(n)) | Reading: Red | Swapping elements: Blue | Pivot: Green"s,
+        { "Quicksort"s, std::tuple{ 
+                "q"s,
+                std::vector{
+                    " Time Complexity: O(nlog(n))"s,
+                    " Reading: Red"s,
+                    " Swapping: Blue"s,
+                    " Pivot: Green"s
+                },
                 sv::algorithms::quicksort
             }},
-        { "Radix Sort"s, std::pair{ 
-                "Radix Sort O(d*(n + b)) | Reading: Red | Writing: Blue | Finding Max: Yellow"s,
+        { "Radix Sort"s, std::tuple{ 
+                "r"s,
+                std::vector{
+                    " Time Complexity: O(d*(n + b))"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s,
+                    " Find Maximum: Yellow"s
+                },
                 sv::algorithms::radixsort
             }},
-        { "Insertion Sort"s, std::pair{ 
-                "Insertion Sort O(n^2) | Reading: Red | Writing: Blue"s,
+        { "Insertion Sort"s, std::tuple{ 
+                "i"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s
+                },
                 sv::algorithms::insertionsort
             }},
-        { "Selection Sort"s, std::pair{ 
-                "Selection Sort O(n^2) | Writing: Blue | Finding Min: Yellow"s,
+        { "Selection Sort"s, std::tuple{ 
+                "s"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Writing: Blue"s,
+                    " Finding Minimum: Yellow"s
+                },
                 sv::algorithms::selectionsort
             }},
-        { "Pancake Sort"s, std::pair{ 
-                "Pancake Sort O(n^2) | Reverse swap: Blue | Finding Max: Yellow"s,
+        { "Pancake Sort"s, std::tuple{ 
+                "p"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Reverse Swap: Blue"s,
+                    " Finding Minimum: Yellow"s
+                },
                 sv::algorithms::pancakesort
             }}
     };
@@ -93,16 +131,15 @@ auto main() -> int
     );
 
     auto statusbar = sv::Statusbar{
-        width * 0.15f,
+        (width * 0.15f) - 10.0f,
         height,
-        // v_width,
-        // 0.0f,
+        12u,
         elems,
         sorter
     };
 
     viewer->setPosition(0.0f, 0.0f);
-    statusbar.setPosition(v_width, 0.0f);
+    statusbar.setPosition(v_width + 10.0f, 0.0f);
 
     while (window.isOpen())
     {
