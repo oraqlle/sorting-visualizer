@@ -38,15 +38,15 @@ auto main() -> int
 
     auto map = sv::Sorter::map_type{
         { "Bubble Sort"s, std::tuple{
-                "b"s,
+                "B"s,
                 std::vector{ 
                     " Time Complexity: O(n^2)"s,
-                    " Reading: Red"s 
+                    " Read & Swap: Red"s 
                 },
                 sv::algorithms::bubblesort
             }},
         { "Mergesort"s, std::tuple{ 
-                "m"s,
+                "M"s,
                 std::vector{ 
                     " Time Complexity: O(nlog(n))"s,
                     " Reading: Red"s,
@@ -57,7 +57,7 @@ auto main() -> int
                 sv::algorithms::mergesort
             }},
         { "Quicksort"s, std::tuple{ 
-                "q"s,
+                "Q"s,
                 std::vector{
                     " Time Complexity: O(nlog(n))"s,
                     " Reading: Red"s,
@@ -67,7 +67,7 @@ auto main() -> int
                 sv::algorithms::quicksort
             }},
         { "Radix Sort"s, std::tuple{ 
-                "r"s,
+                "R"s,
                 std::vector{
                     " Time Complexity: O(d*(n + b))"s,
                     " Reading: Red"s,
@@ -86,7 +86,7 @@ auto main() -> int
                 sv::algorithms::insertionsort
             }},
         { "Selection Sort"s, std::tuple{ 
-                "s"s,
+                "S"s,
                 std::vector{
                     " Time Complexity: O(n^2)"s,
                     " Writing: Blue"s,
@@ -95,7 +95,7 @@ auto main() -> int
                 sv::algorithms::selectionsort
             }},
         { "Pancake Sort"s, std::tuple{ 
-                "p"s,
+                "P"s,
                 std::vector{
                     " Time Complexity: O(n^2)"s,
                     " Reverse Swap: Blue"s,
@@ -209,6 +209,22 @@ auto main() -> int
 
                     case sf::Keyboard::P:
                         sorter->select_algorithm("Pancake Sort"s);
+                        break;
+
+                    case sf::Keyboard::Up:
+                        sorter->adjust_delay(5ms, 0ms);
+                        break;
+
+                    case sf::Keyboard::Down:
+                        sorter->adjust_delay(-5ms, 0ms);
+                        break;
+
+                    case sf::Keyboard::Right:
+                        sorter->adjust_delay(0ms, 5ms);
+                        break;
+
+                    case sf::Keyboard::Left:
+                        sorter->adjust_delay(0ms, -5ms);
                         break;
                     
                     default:

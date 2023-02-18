@@ -6,6 +6,7 @@
 #include <visualizer/viewer.hxx>
 
 #include <algorithm>
+#include <chrono>
 #include <exception>
 #include <functional>
 #include <memory>
@@ -30,17 +31,17 @@ namespace sv
     {
     public:
 
-        using function_type = std::function<void(
+        using duration_type         = std::chrono::milliseconds;
+        using function_type         = std::function<void(
             std::shared_ptr<Elements> elems,
             std::shared_ptr<Viewer> viewer
         )>;
-
-        using map_type = std::unordered_map<
-            std::string,                        /// Algorithm name
+        using map_type              = std::unordered_map<
+            std::string,                                    /// Algorithm name
             std::tuple<
-                std::string,                    /// Keybinding
-                std::vector<std::string>,       /// Details
-                function_type                   /// Algorithm Implementation
+                std::string,                                /// Keybinding
+                std::vector<std::string>,                   /// Details
+                function_type                               /// Algorithm Implementation
             >
         >;
 
@@ -207,6 +208,15 @@ namespace sv
                 }),
                 std::ostream_iterator<std::string>(ss, "\n")
             );
+        }
+
+        auto adjust_delay(duration_type rdelay, duration_type wdelay)
+            noexcept -> void
+        {
+            auto&& [rdd, wrd] = m_elems->delays();
+
+            rdd += rdelay;
+            wrd += wdelay;
         }
 
         constexpr auto 

@@ -112,7 +112,15 @@ namespace sv
                << " Commands:\n"
                << "  Start: Enter\n"
                << "  Exit: Esc\n"
-               << " Algorithms:\n";
+               << "  Read Delay:\n"
+               << "    Increase: Up Arrow\n"
+               << "    Decrease: Down Arrow\n"
+               << "  Write Delay:\n"
+               << "    Increase: Right Arrow\n"
+               << "    Decrease: Left Arrow\n"
+               << " Algorithms:\n"
+               << "  Check: c\n"
+               << "  Shuffle: Space\n";
 
             m_sorter->algorithm_keybinds(ss);            
 
