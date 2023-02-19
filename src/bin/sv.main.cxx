@@ -28,41 +28,79 @@
 namespace fs = std::filesystem;
 using namespace std::literals;
 
-constexpr int width     = 1200;
-constexpr int height    = 940;
-
 auto main() -> int
 {
-    sf::RenderWindow window(sf::VideoMode(width, height), "SV - Sorter");
-    window.setFramerateLimit(60);
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "SV - Sorter", sf::Style::Fullscreen);
+    window.setFramerateLimit(120);
+    const auto [width, height] = static_cast<sf::Vector2f>(window.getSize());
+    const auto v_width { width - (width * 0.15f) };
+    const auto max_num_elements { static_cast<std::size_t>(v_width * (5.0f / 48.0f)) };
 
     auto map = sv::Sorter::map_type{
-        { "Bubble Sort"s, std::pair{ 
-                "Bubblesort O(n^2) | Reading:: Red"s,
+        { "Bubble Sort"s, std::tuple{
+                "B"s,
+                std::vector{ 
+                    " Time Complexity: O(n^2)"s,
+                    " Read & Swap: Red"s 
+                },
                 sv::algorithms::bubblesort
             }},
-        { "Mergesort"s, std::pair{ 
-                "Mergesort O(nlog(n)) | Reading: Red | Writing: Blue | Left: Cyan | Right: Yellow"s,
+        { "Mergesort"s, std::tuple{ 
+                "M"s,
+                std::vector{ 
+                    " Time Complexity: O(nlog(n))"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s,
+                    " Left Bound: Cyan"s,
+                    " Right Bound: Yellow"s
+                },
                 sv::algorithms::mergesort
             }},
-        { "Quicksort"s, std::pair{ 
-                "Quicksort O(nlog(n)) | Reading: Red | Swapping elements: Blue | Pivot: Green"s,
+        { "Quicksort"s, std::tuple{ 
+                "Q"s,
+                std::vector{
+                    " Time Complexity: O(nlog(n))"s,
+                    " Reading: Red"s,
+                    " Swapping: Blue"s,
+                    " Pivot: Green"s
+                },
                 sv::algorithms::quicksort
             }},
-        { "Radix Sort"s, std::pair{ 
-                "Radix Sort O(d*(n + b)) | Reading: Red | Writing: Blue | Finding Max: Yellow"s,
+        { "Radix Sort"s, std::tuple{ 
+                "R"s,
+                std::vector{
+                    " Time Complexity: O(d*(n + b))"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s,
+                    " Find Maximum: Yellow"s
+                },
                 sv::algorithms::radixsort
             }},
-        { "Insertion Sort"s, std::pair{ 
-                "Insertion Sort O(n^2) | Reading: Red | Writing: Blue"s,
+        { "Insertion Sort"s, std::tuple{ 
+                "I"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s
+                },
                 sv::algorithms::insertionsort
             }},
-        { "Selection Sort"s, std::pair{ 
-                "Selection Sort O(n^2) | Writing: Blue | Finding Min: Yellow"s,
+        { "Selection Sort"s, std::tuple{ 
+                "S"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Writing: Blue"s,
+                    " Finding Minimum: Yellow"s
+                },
                 sv::algorithms::selectionsort
             }},
-        { "Pancake Sort"s, std::pair{ 
-                "Pancake Sort O(n^2) | Reverse swap: Blue | Finding Max: Yellow"s,
+        { "Pancake Sort"s, std::tuple{ 
+                "P"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Reverse Swap: Blue"s,
+                    " Finding Minimum: Yellow"s
+                },
                 sv::algorithms::pancakesort
             }}
     };
@@ -70,15 +108,15 @@ auto main() -> int
     auto sfx = std::make_shared<sv::Sound>();
 
     auto elems = std::make_shared<sv::Elements>(
-        static_cast<sv::Elements::element_type>(height - (0.05f * height)),
-        200uL,
+        height - (0.005f * height),
+        max_num_elements,
         10ms,
         10ms,
         sfx
     );
 
     auto viewer = std::make_shared<sv::Viewer>(
-        width,
+        v_width,
         height,
         elems
     );
@@ -93,11 +131,15 @@ auto main() -> int
     );
 
     auto statusbar = sv::Statusbar{
-        width,
-        0.05f * height,
+        (width * 0.15f) - 10.0f,
+        height,
+        14u,
         elems,
         sorter
     };
+
+    viewer->setPosition(0.0f, 0.0f);
+    statusbar.setPosition(v_width + 10.0f, 0.0f);
 
     while (window.isOpen())
     {
@@ -167,6 +209,36 @@ auto main() -> int
 
                     case sf::Keyboard::P:
                         sorter->select_algorithm("Pancake Sort"s);
+                        break;
+
+                    case sf::Keyboard::Up:
+                        sorter->adjust_delay(5ms, 0ms);
+                        break;
+
+                    case sf::Keyboard::Down:
+                        sorter->adjust_delay(-5ms, 0ms);
+                        break;
+
+                    case sf::Keyboard::Right:
+                        sorter->adjust_delay(0ms, 5ms);
+                        break;
+
+                    case sf::Keyboard::Left:
+                        sorter->adjust_delay(0ms, -5ms);
+                        break;
+
+                    case sf::Keyboard::LBracket:
+                        if (auto csize { elems->size() }; csize != 0uL) [[likely]]
+                            sorter->resize(csize - 1uL);
+                        else
+                            std::clog << "The number of elements cannot be lower than 0!" << std::endl;
+                        break;
+
+                    case sf::Keyboard::RBracket:
+                        if (auto csize { elems->size() }; csize != max_num_elements) [[likely]]
+                            sorter->resize(csize + 1uL);
+                        else
+                            std::clog << "The number of elements cannot be higher than "<< max_num_elements << "!" << std::endl;
                         break;
                     
                     default:

@@ -58,15 +58,7 @@ namespace sv
             , m_rects{ std::vector<rect_type>(elems->size(), rect_type{}) }
             , m_rect_width{ static_cast<float>(width) / static_cast<float>(elems->size()) }
         {
-            std::ranges::fill(m_rects, rect_type(sf::Vector2f(m_rect_width - (m_rect_width * 0.1f), 0.0f)));
-            std::ranges::for_each(
-                m_rects,
-                [this](auto& r)
-                {   
-                    r.setOutlineThickness(m_rect_width * 0.1f);
-                    r.setOutlineColor(sf::Color::Black);
-                }
-            );
+            _M_generate();
 
             m_texture.create(
                 static_cast<unsigned int>(m_window_width),
@@ -85,7 +77,18 @@ namespace sv
             m_window_width  = size_type{};
         }
 
-        void render() noexcept
+        auto resize(size_type new_size)
+            noexcept -> void
+        {
+            m_rect_width = static_cast<float>(m_window_width) / static_cast<float>(new_size);
+            m_colours.resize(new_size);
+            m_rects.resize(new_size);
+            _M_generate();
+            unmark_range(0ul, new_size);
+        }
+
+        auto render() 
+            noexcept -> void
         {
             m_texture.clear();
 
@@ -130,6 +133,22 @@ namespace sv
         auto unmark_range(size_type fidx, size_type eidx)
             noexcept -> void
         { std::fill(m_colours.begin() + fidx, m_colours.begin() + eidx, colour_type::White); }
+
+    private:
+
+        auto _M_generate()
+            noexcept -> void
+        {
+            std::ranges::fill(m_rects, rect_type(sf::Vector2f(m_rect_width - (m_rect_width * 0.1f), 0.0f)));
+            std::ranges::for_each(
+                m_rects,
+                [this](auto& r)
+                {   
+                    r.setOutlineThickness(m_rect_width * 0.1f);
+                    r.setOutlineColor(sf::Color::Black);
+                }
+            );
+        }
 
     private:
         size_type                   m_window_width;
