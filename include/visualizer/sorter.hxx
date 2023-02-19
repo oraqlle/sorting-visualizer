@@ -219,12 +219,19 @@ namespace sv
         auto algorithm_keybinds(std::stringstream& ss) 
             -> void
         {
+            auto max  = std::ranges::max(
+                m_algorithms | std::views::keys,
+                {},
+                std::ranges::size
+            ).size();
+
             std::ranges::copy(
-                m_algorithms | std::views::transform([](const auto& kvs)
+                m_algorithms | std::views::transform([&max](const auto& kvs)
                 {
                     auto& [k, vs] = kvs;
 
-                    return "  "s + k + ": " + std::get<0>(vs);
+                    auto fill = std::string(max - k.size(), ' ');
+                    return "  "s + k + fill + " : " + std::get<0>(vs);
                 }),
                 std::ostream_iterator<std::string>(ss, "\n")
             );

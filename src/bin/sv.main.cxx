@@ -2,6 +2,8 @@
 
 #include <algorithms/bubblesort.hxx>
 #include <algorithms/insertionsort.hxx>
+#include <algorithms/introsort.hxx>
+#include <algorithms/heapsort.hxx>
 #include <algorithms/mergesort.hxx>
 #include <algorithms/pancakesort.hxx>
 #include <algorithms/quicksort.hxx>
@@ -102,6 +104,29 @@ auto main() -> int
                     " Finding Minimum: Yellow"s
                 },
                 sv::algorithms::pancakesort
+            }},
+        { "Heapsort"s, std::tuple{ 
+                "H"s,
+                std::vector{
+                    " Time Complexity: O(nlog(n))"s,
+                    " Heap Levels: Random Colors"s,
+                    " Swapping: Magenta"s
+                },
+                sv::algorithms::heapsort
+            }},
+        { "Introsort"s, std::tuple{ 
+                "Shift + I"s,
+                std::vector{
+                    " Time Complexity: O(nlog(n))"s,
+                    " Quick Reading: Red"s,
+                    " Quick Swapping: Blue"s,
+                    " Quick Pivot: Green"s,
+                    " Insertion Reading: Red"s,
+                    " Insertion Writing: Blue"s,
+                    " Heap Levels: Random Colors"s,
+                    " Heap Swapping: Magenta"s
+                },
+                sv::algorithms::introsort
             }}
     };
 
@@ -200,7 +225,10 @@ auto main() -> int
                         break;
 
                     case sf::Keyboard::I:
-                        sorter->select_algorithm("Insertion Sort"s);
+                        if (event.key.shift)
+                            sorter->select_algorithm("Introsort"s);
+                        else
+                            sorter->select_algorithm("Insertion Sort"s);
                         break;
 
                     case sf::Keyboard::S:
@@ -209,6 +237,10 @@ auto main() -> int
 
                     case sf::Keyboard::P:
                         sorter->select_algorithm("Pancake Sort"s);
+                        break;
+
+                    case sf::Keyboard::H:
+                        sorter->select_algorithm("Heapsort"s);
                         break;
 
                     case sf::Keyboard::Up:
