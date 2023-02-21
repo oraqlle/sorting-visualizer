@@ -11,18 +11,19 @@ namespace sv::algorithms
 {
     namespace
     {   
-        auto quicksort_fix(
+        auto quicksort_partition(
             std::shared_ptr<Elements> elems,
             std::shared_ptr<Viewer> viewer,
             long long low,
             long long high
         ) noexcept -> long long
         {
+            auto N { static_cast<long long>(elems->size()) - 1LL };
             auto i { low - 1LL };
-
+            
             for (auto j { low }; j < high; ++j)
             {
-                viewer->mark_range(i, j - 1LL, sf::Color::Blue);
+                viewer->mark_range(std::ranges::clamp(i, 0LL, N), j - 1LL, sf::Color::Blue);
                 viewer->mark(j - 1LL, sf::Color::Red);
 
                 if (elems->compare(j, high))
@@ -33,7 +34,7 @@ namespace sv::algorithms
                         elems->swap_elems(i, j);
                 }
 
-                viewer->unmark_range(i - 1LL, j);
+                viewer->unmark_range(std::ranges::clamp(i - 1LL, 0LL, N), j);
             }
 
             elems->swap_elems(i + 1LL, high);
@@ -47,17 +48,17 @@ namespace sv::algorithms
             long long high
         ) noexcept -> void
         {
-            if (low >= high)
-                return;
+            if (low < high)
+            {
+                auto pivot = quicksort_partition(elems, viewer, low, high);
+                
+                viewer->mark(pivot, sf::Color::Green);
 
-            auto pivot = quicksort_fix(elems, viewer, low, high);
-            
-            viewer->mark(pivot, sf::Color::Green);
+                quicksort_impl(elems, viewer, low, pivot - 1LL);
+                quicksort_impl(elems, viewer, pivot + 1LL, high);
 
-            quicksort_impl(elems, viewer, low, pivot - 1LL);
-            quicksort_impl(elems, viewer, pivot + 1LL, high);
-
-            viewer->unmark(pivot);
+                viewer->unmark(pivot);
+            }
         }
     }
 

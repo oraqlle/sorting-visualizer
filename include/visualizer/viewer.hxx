@@ -128,11 +128,11 @@ namespace sv
 
         auto mark_range(size_type fidx, size_type eidx, colour_type colour)
             noexcept -> void
-        { std::fill(m_colours.begin() + fidx, m_colours.begin() + eidx, colour); }
+        { std::ranges::fill(m_colours.begin() + fidx, m_colours.begin() + eidx, colour); }
 
         auto unmark_range(size_type fidx, size_type eidx)
             noexcept -> void
-        { std::fill(m_colours.begin() + fidx, m_colours.begin() + eidx, colour_type::White); }
+        { std::ranges::fill(m_colours.begin() + fidx, m_colours.begin() + eidx, colour_type::White); }
 
     private:
 

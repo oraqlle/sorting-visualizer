@@ -121,8 +121,8 @@ auto main() -> int
                     " Quick Reading: Red"s,
                     " Quick Swapping: Blue"s,
                     " Quick Pivot: Green"s,
-                    " Insertion Reading: Red"s,
-                    " Insertion Writing: Blue"s,
+                    " Insertion Reading: Yellow"s,
+                    " Insertion Writing: Cyan"s,
                     " Heap Levels: Random Colors"s,
                     " Heap Swapping: Magenta"s
                 },

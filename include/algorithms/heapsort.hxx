@@ -28,14 +28,10 @@ namespace sv::algorithms
             auto right { 2uL * i + 2uL };
 
             if (left < N && elems->compare(left, max, std::ranges::greater{}))
-            {
                 max = left;
-            }
 
             if (right < N && elems->compare(right, max, std::ranges::greater{}))
-            {
                 max = right;
-            }
 
             if (max != i)
             {
