@@ -156,12 +156,12 @@ namespace sv::algorithms
             auto N { static_cast<long long>(elems->size()) - 1LL };
             auto i { low - 1LL };
             
-            for (auto j { low }; j < high; ++j)
+            for (auto j { low }; j <= high - 1LL; ++j)
             {
                 viewer->mark_range(std::ranges::clamp(i, 0LL, N), j - 1LL, sf::Color::Blue);
                 viewer->mark(j - 1LL, sf::Color::Red);
 
-                if (elems->compare(j, high))
+                if (elems->compare(j, high, std::ranges::less_equal{}))
                 {
                     i += 1LL;
                     
@@ -186,30 +186,22 @@ namespace sv::algorithms
         {
             auto N { high - low };
 
-            if (N < 16uL)
+            if (N > 1uL)
             {
-                introsort_insertion(elems, viewer, low, high);
-                return;
+                if (maxdepth == 0uL)
+                    introsort_heapsort(elems, viewer, low, high + 1uL);
+                else
+                {
+                    auto pivot = median_three(elems, viewer, low, low + (N / 2uL), high);
+                    elems->swap_elems(pivot, high);
+
+                    auto partition = introsort_partition(elems, viewer, low, high);
+                    viewer->mark(partition, sf::Color::Green);
+                    introsort_impl(elems, viewer, low, partition, maxdepth - 1uL);
+                    introsort_impl(elems, viewer, partition, high, maxdepth - 1uL);
+                    viewer->unmark(partition);
+                }
             }
-
-            if (maxdepth == 0uL)
-            {
-                introsort_heapsort(elems, viewer, low, high + 1uL);
-                // std::make_heap(std::addressof(elems->silent_read(low)), std::addressof(elems->silent_read(high + 1uL)));
-                // std::sort_heap(std::addressof(elems->silent_read(low)), std::addressof(elems->silent_read(high + 1uL)));
-                return;
-            }
-
-            
-            auto pivot = median_three(elems, viewer, low, ((low + N) / 2uL), high);
-            elems->swap_elems(pivot, high);
-
-            auto partition = introsort_partition(elems, viewer, low, high);
-            viewer->mark(partition, sf::Color::Green);
-            introsort_impl(elems, viewer, low, partition - 1uL, maxdepth - 1uL);
-            introsort_impl(elems, viewer, partition + 1uL, high, maxdepth - 1uL);
-            viewer->unmark(partition);
-            return;
         }
     }
 
@@ -218,11 +210,14 @@ namespace sv::algorithms
         std::shared_ptr<Viewer> viewer
     ) noexcept -> void
     {
-        auto N { elems->size() };
+        auto N { elems->size() - 1uL };
         auto maxdepth { static_cast<std::size_t>(std::log(N)) * 2uL };
-        // auto maxdepth { static_cast<std::size_t>(std::floor(std::log2(N))) * 2uL };
 
-        introsort_impl(elems, viewer, 0uL, N - 1uL, maxdepth);
+        if (N > 1uL)
+        {
+            introsort_impl(elems, viewer, 0uL, N, maxdepth);
+            introsort_insertion(elems, viewer, 0uL, N);
+        }
     }
 
 }  /// namespace sv::algorithms
