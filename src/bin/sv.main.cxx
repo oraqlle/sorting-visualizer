@@ -1,6 +1,9 @@
 #include <SFML/Graphics.hpp>
 
 #include <algorithms/bubblesort.hxx>
+#include <algorithms/bubblesortII.hxx>
+#include <algorithms/bucketsort.hxx>
+#include <algorithms/countingsort.hxx>
 #include <algorithms/insertionsort.hxx>
 #include <algorithms/introsort.hxx>
 #include <algorithms/heapsort.hxx>
@@ -137,6 +140,38 @@ auto main() -> int
                     " Writing: Blue"s
                 },
                 sv::algorithms::shellsort
+            }},
+        { "Bucket Sort"s, std::tuple{ 
+                "Shift + B"s,
+                std::vector{
+                    " Time Complexity: O(n + k)"s,
+                    " Find Minimum: Yellow"s,
+                    " Find Maximum: Cyan"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s
+                },
+                sv::algorithms::bucketsort
+            }},
+        { "Counting Sort"s, std::tuple{ 
+                "Shift + C"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Find Minimum: Yellow"s,
+                    " Find Maximum: Cyan"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s
+                },
+                sv::algorithms::countingsort
+            }},
+        { "Bubble Sort II"s, std::tuple{ 
+                "Ctrl + B"s,
+                std::vector{
+                    " Time Complexity (Worst): O(n^2)"s,
+                    " Time Complexity (Best): O(n)"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s
+                },
+                sv::algorithms::bubblesortII
             }}
     };
 
@@ -211,11 +246,14 @@ auto main() -> int
                         break;
 
                     case sf::Keyboard::C:
-                        if (!sorter->sorting())
-                        {
-                            sorter->select_algorithm("Check"s);
-                            sorter->start();
-                        }
+                        if (event.key.shift)
+                            sorter->select_algorithm("Counting Sort"s);
+                        else
+                            if (!sorter->sorting())
+                            {
+                                sorter->select_algorithm("Check"s);
+                                sorter->start();
+                            }
                         break;
 
                     case sf::Keyboard::Up:
@@ -249,7 +287,12 @@ auto main() -> int
                         break;
 
                     case sf::Keyboard::B:
-                        sorter->select_algorithm("Bubble Sort"s);
+                        if (event.key.shift)
+                            sorter->select_algorithm("Bucket Sort"s);
+                        else if (event.key.alt)
+                            sorter->select_algorithm("Bubble Sort II"s);
+                        else
+                            sorter->select_algorithm("Bubble Sort"s);
                         break;
 
                     case sf::Keyboard::M:

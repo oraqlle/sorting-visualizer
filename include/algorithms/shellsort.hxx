@@ -23,7 +23,7 @@ namespace sv::algorithms
             for (auto i { gap }; i < N; i += 1uL)
             {
                 viewer->mark(i, sf::Color::Red);
-                auto&& [rd, wr, cp, sw] = elems->counters();
+                auto&& [cp, rd, wr, sw] = elems->counters();
 
                 auto t { elems->read(i) };
                 auto j { 0uL };

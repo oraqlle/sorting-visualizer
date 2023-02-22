@@ -139,7 +139,7 @@ namespace sv::algorithms
                 )
             );
 
-            auto&& [rd, wr, cp, sw] = elems->counters();
+            auto&& [cp, rd, wr, sw] = elems->counters();
             cp += 4uL;
 
             return elems->silent_read(a) == r ? a 
