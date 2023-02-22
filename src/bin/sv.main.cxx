@@ -9,6 +9,7 @@
 #include <algorithms/quicksort.hxx>
 #include <algorithms/radixsort.hxx>
 #include <algorithms/selectionsort.hxx>
+#include <algorithms/shellsort.hxx>
 
 #include <visualizer/elements.hxx>
 #include <visualizer/sorter.hxx>
@@ -127,6 +128,15 @@ auto main() -> int
                     " Heap Swapping: Magenta"s
                 },
                 sv::algorithms::introsort
+            }},
+        { "Shell Sort"s, std::tuple{ 
+                "Shift + S"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s
+                },
+                sv::algorithms::shellsort
             }}
     };
 
@@ -208,41 +218,6 @@ auto main() -> int
                         }
                         break;
 
-                    case sf::Keyboard::B:
-                        sorter->select_algorithm("Bubble Sort"s);
-                        break;
-
-                    case sf::Keyboard::M:
-                        sorter->select_algorithm("Mergesort"s);
-                        break;
-
-                    case sf::Keyboard::Q:
-                        sorter->select_algorithm("Quicksort"s);
-                        break;
-                    
-                    case sf::Keyboard::R:
-                        sorter->select_algorithm("Radix Sort"s);
-                        break;
-
-                    case sf::Keyboard::I:
-                        if (event.key.shift)
-                            sorter->select_algorithm("Introsort"s);
-                        else
-                            sorter->select_algorithm("Insertion Sort"s);
-                        break;
-
-                    case sf::Keyboard::S:
-                        sorter->select_algorithm("Selection Sort"s);
-                        break;
-
-                    case sf::Keyboard::P:
-                        sorter->select_algorithm("Pancake Sort"s);
-                        break;
-
-                    case sf::Keyboard::H:
-                        sorter->select_algorithm("Heapsort"s);
-                        break;
-
                     case sf::Keyboard::Up:
                         sorter->adjust_delay(5ms, 0ms);
                         break;
@@ -271,6 +246,44 @@ auto main() -> int
                             sorter->resize(csize + 1uL);
                         else
                             std::clog << "The number of elements cannot be higher than "<< max_num_elements << "!" << std::endl;
+                        break;
+
+                    case sf::Keyboard::B:
+                        sorter->select_algorithm("Bubble Sort"s);
+                        break;
+
+                    case sf::Keyboard::M:
+                        sorter->select_algorithm("Mergesort"s);
+                        break;
+
+                    case sf::Keyboard::Q:
+                        sorter->select_algorithm("Quicksort"s);
+                        break;
+                    
+                    case sf::Keyboard::R:
+                        sorter->select_algorithm("Radix Sort"s);
+                        break;
+
+                    case sf::Keyboard::I:
+                        if (event.key.shift)
+                            sorter->select_algorithm("Introsort"s);
+                        else
+                            sorter->select_algorithm("Insertion Sort"s);
+                        break;
+
+                    case sf::Keyboard::S:
+                        if (event.key.shift)
+                            sorter->select_algorithm("Shell Sort"s);
+                        else
+                            sorter->select_algorithm("Selection Sort"s);
+                        break;
+
+                    case sf::Keyboard::P:
+                        sorter->select_algorithm("Pancake Sort"s);
+                        break;
+
+                    case sf::Keyboard::H:
+                        sorter->select_algorithm("Heapsort"s);
                         break;
                     
                     default:

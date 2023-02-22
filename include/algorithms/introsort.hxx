@@ -124,26 +124,26 @@ namespace sv::algorithms
             long long b,
             long long c            
         ) noexcept -> long long
-        {
-            auto le { std::ranges::less_equal{} };
+        { 
+            auto r = std::max(
+                std::min(
+                    elems->read(a),
+                    elems->read(b)
+                ), 
+                std::min(
+                    std::max(
+                        elems->read(a),
+                        elems->read(b)
+                    ),
+                    elems->read(c)
+                )
+            );
 
-            if (elems->compare(a, b) && elems->compare(b, c))
-                return b;
+            auto&& [rd, wr, cp, sw] = elems->counters();
+            cp += 4uL;
 
-            if (elems->compare(a, c) && elems->compare(c, b, le))
-                return c;
-
-            if (elems->compare(b, a, le) && elems->compare(a, c))
-                return a;
-
-            if (elems->compare(b, c) && elems->compare(c, a, le))
-                return c;
-
-            if (elems->compare(c, a, le) && elems->compare(a, b))
-                return a;
-
-            if (elems->compare(c, b, le) && elems->compare(b, a, le))
-                return b;
+            return elems->silent_read(a) == r ? a 
+                 : elems->silent_read(b) == r ? b : c;
         }
         
         auto introsort_partition(
