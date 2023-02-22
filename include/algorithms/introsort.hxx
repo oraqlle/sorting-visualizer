@@ -85,10 +85,10 @@ namespace sv::algorithms
             auto rd   = std::random_device{};
             auto reng = std::mt19937{ rd() };
 
-            auto N { static_cast<long>(high) };
+            auto N { high };
             auto levels { static_cast<long>(std::floor(std::log2(N))) + 1L };
 
-            auto last_level { 0L };
+            auto last_level { low };
             for (auto l { 0L }; l < levels; ++l)
             {
                 auto lsize { static_cast<long>(std::pow(2.0f, l)) };
@@ -104,15 +104,17 @@ namespace sv::algorithms
             for (auto i { (N / 2L) - 1L }; i >= low; --i)
                 introsort_make_heap(elems, viewer, N, i);
 
-            for (auto i { N - 1L }; i >= 0L; --i)
+            for (auto i { N - 1L }; i >= low; --i)
             {
                 viewer->mark(low, sf::Color::Magenta);
                 viewer->mark(i, sf::Color::Magenta);
-                elems->swap_elems(0uL, i);
+                elems->swap_elems(low, i);
                 introsort_make_heap(elems, viewer, i, low);
                 viewer->unmark(low);
                 viewer->unmark(i);
             }
+
+            viewer->unmark_range(low, last_level);
         }
 
         auto median_three(
@@ -142,8 +144,6 @@ namespace sv::algorithms
 
             if (elems->compare(c, b, le) && elems->compare(b, a, le))
                 return b;
-
-            return 0LL;
         }
         
         auto introsort_partition(
@@ -153,15 +153,15 @@ namespace sv::algorithms
             long long high
         ) noexcept -> long long
         {
-            auto pivotidx { high };
+            auto N { static_cast<long long>(elems->size()) - 1LL };
             auto i { low - 1LL };
-
+            
             for (auto j { low }; j < high; ++j)
             {
-                viewer->mark_range(i, j - 1LL, sf::Color::Blue);
+                viewer->mark_range(std::ranges::clamp(i, 0LL, N), j - 1LL, sf::Color::Blue);
                 viewer->mark(j - 1LL, sf::Color::Red);
 
-                if (elems->compare(j, pivotidx))
+                if (elems->compare(j, high))
                 {
                     i += 1LL;
                     
@@ -169,7 +169,7 @@ namespace sv::algorithms
                         elems->swap_elems(i, j);
                 }
 
-                viewer->unmark_range(i - 1LL, j);
+                viewer->unmark_range(std::ranges::clamp(i - 1LL, 0LL, N), j);
             }
 
             elems->swap_elems(i + 1LL, high);
@@ -194,9 +194,9 @@ namespace sv::algorithms
 
             if (maxdepth == 0uL)
             {
-                // introsort_heapsort(elems, viewer, low, high + 1uL);
-                std::make_heap(std::addressof(elems->silent_read(low)), std::addressof(elems->silent_read(high)) + 1);
-                std::sort_heap(std::addressof(elems->silent_read(low)), std::addressof(elems->silent_read(high)) + 1);
+                introsort_heapsort(elems, viewer, low, high + 1uL);
+                // std::make_heap(std::addressof(elems->silent_read(low)), std::addressof(elems->silent_read(high + 1uL)));
+                // std::sort_heap(std::addressof(elems->silent_read(low)), std::addressof(elems->silent_read(high + 1uL)));
                 return;
             }
 
@@ -219,7 +219,8 @@ namespace sv::algorithms
     ) noexcept -> void
     {
         auto N { elems->size() };
-        auto maxdepth { static_cast<std::size_t>(std::floor(std::log2(N))) * 2uL };
+        auto maxdepth { static_cast<std::size_t>(std::log(N)) * 2uL };
+        // auto maxdepth { static_cast<std::size_t>(std::floor(std::log2(N))) * 2uL };
 
         introsort_impl(elems, viewer, 0uL, N - 1uL, maxdepth);
     }
