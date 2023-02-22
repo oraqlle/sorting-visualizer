@@ -257,19 +257,19 @@ auto main() -> int
                         break;
 
                     case sf::Keyboard::Up:
-                        sorter->adjust_delay(5ms, 0ms);
+                        sorter->adjust_delay(100us, 0us);
                         break;
 
                     case sf::Keyboard::Down:
-                        sorter->adjust_delay(-5ms, 0ms);
+                        sorter->adjust_delay(-100us, 0us);
                         break;
 
                     case sf::Keyboard::Right:
-                        sorter->adjust_delay(0ms, 5ms);
+                        sorter->adjust_delay(0us, 100us);
                         break;
 
                     case sf::Keyboard::Left:
-                        sorter->adjust_delay(0ms, -5ms);
+                        sorter->adjust_delay(0us, -100us);
                         break;
 
                     case sf::Keyboard::LBracket:

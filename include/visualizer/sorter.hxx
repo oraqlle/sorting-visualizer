@@ -32,7 +32,7 @@ namespace sv
     public:
 
         using size_type             = std::size_t;
-        using duration_type         = std::chrono::milliseconds;
+        using duration_type         = std::chrono::microseconds;
         using clock_type            = std::chrono::high_resolution_clock;
         using time_point_type       = std::chrono::time_point<clock_type>;
         using function_type         = std::function<void(
@@ -209,11 +209,11 @@ namespace sv
         }
 
         auto elapsed_time() noexcept
-            -> duration_type
+            -> std::chrono::milliseconds
         { 
             if (m_sorting)
                 m_end_time_point = clock_type::now();
-            return std::chrono::duration_cast<duration_type>(m_end_time_point - m_start_time_point); 
+            return std::chrono::duration_cast<std::chrono::milliseconds>(m_end_time_point - m_start_time_point); 
         }
 
         auto algorithm_keybinds(std::stringstream& ss) 
@@ -245,8 +245,8 @@ namespace sv
             rdd += rdelay;
             wrd += wdelay;
 
-            rdd = std::ranges::clamp(rdd, std::chrono::milliseconds::zero(), std::chrono::milliseconds::max());
-            wrd = std::ranges::clamp(wrd, std::chrono::milliseconds::zero(), std::chrono::milliseconds::max());
+            rdd = std::ranges::clamp(rdd, std::chrono::microseconds::zero(), std::chrono::microseconds::max());
+            wrd = std::ranges::clamp(wrd, std::chrono::microseconds::zero(), std::chrono::microseconds::max());
         }
 
         auto resize(size_type new_size)

@@ -23,7 +23,7 @@ namespace sv
 
         using element_type          = float;
         using size_type             = std::size_t;
-        using duration_type         = std::chrono::milliseconds;
+        using duration_type         = std::chrono::microseconds;
         using sound_type            = std::shared_ptr<sv::Sound>;
 
     public:
