@@ -36,18 +36,20 @@ $ ./build/bin/sv
 
 The included sorting algorithms in SV are:
 
-- Bucket sort
 - Bubble sort
+- Bubble sort II
+- Bucket sort
 - Counting sort
 - Insertion sort
-- Intro sort
-- Heap sort
+- Introsort
+- Heapsort
 - Mergesort
 - Pancake sort
 - Quicksort
 - Radix sort
 - Selection sort
 - Shellsort
+- Timsort
 
 ### Adding your own
 
