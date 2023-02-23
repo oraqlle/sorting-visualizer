@@ -13,12 +13,13 @@
 #include <algorithms/radixsort.hxx>
 #include <algorithms/selectionsort.hxx>
 #include <algorithms/shellsort.hxx>
+#include <algorithms/timsort.hxx>
 
-#include <visualizer/elements.hxx>
-#include <visualizer/sorter.hxx>
-#include <visualizer/statusbar.hxx>
-#include <visualizer/sound.hxx>
-#include <visualizer/viewer.hxx>
+#include <sv/elements.hxx>
+#include <sv/sorter.hxx>
+#include <sv/statusbar.hxx>
+#include <sv/sound.hxx>
+#include <sv/viewer.hxx>
 
 #include <algorithm>
 #include <chrono>
@@ -172,6 +173,18 @@ auto main() -> int
                     " Writing: Blue"s
                 },
                 sv::algorithms::bubblesortII
+            }},
+        { "Timsort"s, std::tuple{ 
+                "T"s,
+                std::vector{
+                    " Time Complexity: O(nlog(n))"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s,
+                    " Left Bound: Cyan"s,
+                    " Right Bound: Yellow"s,
+                    " Subarray Insertion Start: Magenta"s
+                },
+                sv::algorithms::timsort
             }}
     };
 
@@ -295,8 +308,23 @@ auto main() -> int
                             sorter->select_algorithm("Bubble Sort"s);
                         break;
 
+                    case sf::Keyboard::H:
+                        sorter->select_algorithm("Heapsort"s);
+                        break;
+
+                    case sf::Keyboard::I:
+                        if (event.key.shift)
+                            sorter->select_algorithm("Introsort"s);
+                        else
+                            sorter->select_algorithm("Insertion Sort"s);
+                        break;
+
                     case sf::Keyboard::M:
                         sorter->select_algorithm("Mergesort"s);
+                        break;
+
+                    case sf::Keyboard::P:
+                        sorter->select_algorithm("Pancake Sort"s);
                         break;
 
                     case sf::Keyboard::Q:
@@ -307,13 +335,6 @@ auto main() -> int
                         sorter->select_algorithm("Radix Sort"s);
                         break;
 
-                    case sf::Keyboard::I:
-                        if (event.key.shift)
-                            sorter->select_algorithm("Introsort"s);
-                        else
-                            sorter->select_algorithm("Insertion Sort"s);
-                        break;
-
                     case sf::Keyboard::S:
                         if (event.key.shift)
                             sorter->select_algorithm("Shell Sort"s);
@@ -321,12 +342,8 @@ auto main() -> int
                             sorter->select_algorithm("Selection Sort"s);
                         break;
 
-                    case sf::Keyboard::P:
-                        sorter->select_algorithm("Pancake Sort"s);
-                        break;
-
-                    case sf::Keyboard::H:
-                        sorter->select_algorithm("Heapsort"s);
+                    case sf::Keyboard::T:
+                        sorter->select_algorithm("Timsort"s);
                         break;
                     
                     default:

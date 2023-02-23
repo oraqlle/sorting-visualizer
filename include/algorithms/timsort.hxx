@@ -1,5 +1,5 @@
-#ifndef SV_ALGORITHMS_MERGE_SORT
-#   define SV_ALGORITHMS_MERGE_SORT
+#ifndef SV_ALGORITHMS_TIM_SORT
+#   define SV_ALGORITHMS_TIm_SORT
 
 #include <SFML/Graphics.hpp>
 
@@ -8,15 +8,43 @@
 #include <sv/viewer.hxx>
 
 #include <functional>
-#include <memory>
 #include <ranges>
-#include <vector>
 
 namespace sv::algorithms
 {
     namespace
     {
-        auto merge(
+        auto timsort_insertion(
+            std::shared_ptr<Elements> elems,
+            std::shared_ptr<Viewer> viewer,
+            long long low,
+            long long high
+        ) noexcept -> void
+        {
+            for (auto i { low + 1LL }; i <= high; ++i)
+            {
+                viewer->mark(i, sf::Color::Yellow);
+                auto current { elems->read(i) };
+                auto j { static_cast<long long>(i) - 1LL };
+
+                auto&& [cmp, r, w, s] = elems->counters();
+
+                while (j >= low && elems->read(j) > current)
+                {
+                    viewer->mark(j + 1LL, sf::Color::Cyan);
+                    elems->write(j + 1LL, elems->read(j));
+                    viewer->unmark(j + 1LL);
+                    j -= 1LL;
+                    cmp += 1uL;
+                }
+
+                cmp += 1uL;
+                elems->write(j + 1LL, current);
+                viewer->unmark(i);
+            }
+        }
+    
+        auto timsort_merge(
             std::shared_ptr<Elements> elems,
             std::shared_ptr<Viewer> viewer,
             std::size_t first,
@@ -96,37 +124,34 @@ namespace sv::algorithms
             viewer->unmark(first);
             viewer->unmark(last);
         }
-
-        auto mergesort_impl(
-            std::shared_ptr<Elements> elems,
-            std::shared_ptr<Viewer> viewer,
-            std::size_t first,
-            std::size_t last
-        ) noexcept -> void
-        {
-            if (first >= last)
-                return;
-
-            auto middle { (first + last) / 2uL };
-
-            mergesort_impl(elems, viewer, first, middle);
-            mergesort_impl(elems, viewer, middle + 1uL, last);
-
-            merge(elems, viewer, first, middle, last);
-        }
     }
 
-    auto mergesort(
+    auto timsort(
         std::shared_ptr<Elements> elems,
         std::shared_ptr<Viewer> viewer
     ) noexcept -> void
     {
-        auto left  { 0uL };
-        auto right { elems->size() - 1 };
+        constexpr auto runs { 32uL };
+        auto N { elems->size() };
+        
+        for (auto i { 0uL }; i < N; i += runs)
+        {   
+            viewer->mark(i, sf::Color::Magenta);
+            timsort_insertion(elems, viewer, i, std::ranges::min(i + runs - 1uL, N - 1uL));
+            viewer->unmark(i);
+        }
 
-        mergesort_impl(elems, viewer, left, right);
+        for (auto size { runs }; size < N; size *= 2uL)
+            for (auto left { 0uL }; left < N; left += 2uL * size)
+            {
+                auto mid { left + size - 1uL };
+                auto right = std::ranges::min(left + (2uL * size) - 1uL, N - 1uL);
+
+                if (mid < right)
+                    timsort_merge(elems, viewer, left, mid, right);
+            }
     }
 
 }  /// namespace sv::algorithms
 
-#endif  // SV_ALGORITHMS_MERGE_SORT
+#endif  // SV_ALGORITHMS_TIM_SORT

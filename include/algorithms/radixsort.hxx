@@ -3,9 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <visualizer/elements.hxx>
-#include <visualizer/sorter.hxx>
-#include <visualizer/viewer.hxx>
+#include <sv/elements.hxx>
+#include <sv/sorter.hxx>
+#include <sv/viewer.hxx>
 
 #include <functional>
 #include <ranges>

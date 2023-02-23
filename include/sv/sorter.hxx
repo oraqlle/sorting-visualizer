@@ -1,9 +1,9 @@
 #ifndef SV_SORTER
 #   define SV_SORTER
 
-#include <visualizer/elements.hxx>
-#include <visualizer/sound.hxx>
-#include <visualizer/viewer.hxx>
+#include <sv/elements.hxx>
+#include <sv/sound.hxx>
+#include <sv/viewer.hxx>
 
 #include <algorithm>
 #include <chrono>

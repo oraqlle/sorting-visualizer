@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <visualizer/sound.hxx>
+#include <sv/sound.hxx>
 
 #include <chrono>
 #include <concepts>

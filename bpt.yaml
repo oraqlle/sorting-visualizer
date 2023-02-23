@@ -1,4 +1,4 @@
-name: sorting-visualizer
+name: sv
 version: 0.1.0
 
 # dependencies:
@@ -7,4 +7,11 @@ version: 0.1.0
 readme: README.md
 
 description: |
-  A program for visualizing sorting algorithms
+  A program for visualizing different sorting algorithms
+
+repository: https://github.com/oraqlle/sv
+
+license: MIT
+
+authors:
+  - Tyler Swann <tyler.swann05@gmail.com>

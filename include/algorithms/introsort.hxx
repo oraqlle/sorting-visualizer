@@ -7,9 +7,9 @@
 #include <algorithms/insertionsort.hxx>
 #include <algorithms/quicksort.hxx>
 
-#include <visualizer/elements.hxx>
-#include <visualizer/sorter.hxx>
-#include <visualizer/viewer.hxx>
+#include <sv/elements.hxx>
+#include <sv/sorter.hxx>
+#include <sv/viewer.hxx>
 
 #include <algorithm>
 #include <cmath>

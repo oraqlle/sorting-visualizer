@@ -3,8 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
-#include <visualizer/elements.hxx>
-#include <visualizer/sorter.hxx>
+#include <sv/elements.hxx>
+#include <sv/sorter.hxx>
 
 #include <algorithm>
 #include <filesystem>
