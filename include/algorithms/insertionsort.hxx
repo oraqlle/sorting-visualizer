@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 
 #include <sv/elements.hxx>
-#include <sv/sorter.hxx>
 #include <sv/viewer.hxx>
 
 #include <functional>
@@ -17,7 +16,7 @@ namespace sv::algorithms
         std::shared_ptr<Viewer> viewer
     ) noexcept -> void
     {
-        for (auto i { 1uL }; i < elems->size(); ++i)
+        for (auto i { 1LL }; i < static_cast<long long>(elems->size()); ++i)
         {
             viewer->mark(i, sf::Color::Red);
             auto current { elems->read(i) };

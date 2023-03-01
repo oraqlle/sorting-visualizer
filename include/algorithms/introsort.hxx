@@ -8,7 +8,6 @@
 #include <algorithms/quicksort.hxx>
 
 #include <sv/elements.hxx>
-#include <sv/sorter.hxx>
 #include <sv/viewer.hxx>
 
 #include <algorithm>

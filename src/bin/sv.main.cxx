@@ -51,7 +51,7 @@ auto main() -> int
                     " Read & Swap: Red"s 
                 },
                 sv::algorithms::bubblesort
-            }},
+        }},
         { "Mergesort"s, std::tuple{ 
                 "M"s,
                 std::vector{ 
@@ -62,7 +62,7 @@ auto main() -> int
                     " Right Bound: Yellow"s
                 },
                 sv::algorithms::mergesort
-            }},
+        }},
         { "Quicksort"s, std::tuple{ 
                 "Q"s,
                 std::vector{
@@ -72,7 +72,7 @@ auto main() -> int
                     " Pivot: Green"s
                 },
                 sv::algorithms::quicksort
-            }},
+        }},
         { "Radix Sort"s, std::tuple{ 
                 "R"s,
                 std::vector{
@@ -82,7 +82,7 @@ auto main() -> int
                     " Find Maximum: Yellow"s
                 },
                 sv::algorithms::radixsort
-            }},
+        }},
         { "Insertion Sort"s, std::tuple{ 
                 "I"s,
                 std::vector{
@@ -91,7 +91,7 @@ auto main() -> int
                     " Writing: Blue"s
                 },
                 sv::algorithms::insertionsort
-            }},
+        }},
         { "Selection Sort"s, std::tuple{ 
                 "S"s,
                 std::vector{
@@ -100,7 +100,7 @@ auto main() -> int
                     " Finding Minimum: Yellow"s
                 },
                 sv::algorithms::selectionsort
-            }},
+        }},
         { "Pancake Sort"s, std::tuple{ 
                 "P"s,
                 std::vector{
@@ -109,7 +109,7 @@ auto main() -> int
                     " Finding Minimum: Yellow"s
                 },
                 sv::algorithms::pancakesort
-            }},
+        }},
         { "Heapsort"s, std::tuple{ 
                 "H"s,
                 std::vector{
@@ -118,7 +118,7 @@ auto main() -> int
                     " Swapping: Magenta"s
                 },
                 sv::algorithms::heapsort
-            }},
+        }},
         { "Introsort"s, std::tuple{ 
                 "Shift + I"s,
                 std::vector{
@@ -132,7 +132,7 @@ auto main() -> int
                     " Heap Swapping: Magenta"s
                 },
                 sv::algorithms::introsort
-            }},
+        }},
         { "Shell Sort"s, std::tuple{ 
                 "Shift + S"s,
                 std::vector{
@@ -141,7 +141,7 @@ auto main() -> int
                     " Writing: Blue"s
                 },
                 sv::algorithms::shellsort
-            }},
+        }},
         { "Bucket Sort"s, std::tuple{ 
                 "Shift + B"s,
                 std::vector{
@@ -152,7 +152,7 @@ auto main() -> int
                     " Writing: Blue"s
                 },
                 sv::algorithms::bucketsort
-            }},
+        }},
         { "Counting Sort"s, std::tuple{ 
                 "Shift + C"s,
                 std::vector{
@@ -163,7 +163,7 @@ auto main() -> int
                     " Writing: Blue"s
                 },
                 sv::algorithms::countingsort
-            }},
+        }},
         { "Bubble Sort II"s, std::tuple{ 
                 "Ctrl + B"s,
                 std::vector{
@@ -173,7 +173,7 @@ auto main() -> int
                     " Writing: Blue"s
                 },
                 sv::algorithms::bubblesortII
-            }},
+        }},
         { "Timsort"s, std::tuple{ 
                 "T"s,
                 std::vector{
@@ -185,7 +185,7 @@ auto main() -> int
                     " Subarray Insertion Start: Magenta"s
                 },
                 sv::algorithms::timsort
-            }}
+        }}
     };
 
     auto sfx = std::make_shared<sv::Sound>();

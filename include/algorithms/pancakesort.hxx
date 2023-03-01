@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 
 #include <sv/elements.hxx>
-#include <sv/sorter.hxx>
 #include <sv/viewer.hxx>
 
 namespace sv::algorithms
