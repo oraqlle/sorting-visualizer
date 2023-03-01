@@ -20,7 +20,7 @@ namespace sv::algorithms
         {
             viewer->mark(i, sf::Color::Red);
             auto current { elems->read(i) };
-            auto j { static_cast<long long>(i) - 1LL };
+            auto j { i - 1LL };
 
             auto&& [cmp, r, w, s] = elems->counters();
 
