@@ -4,9 +4,9 @@
 #include <algorithms/bubblesortII.hxx>
 #include <algorithms/bucketsort.hxx>
 #include <algorithms/countingsort.hxx>
+#include <algorithms/heapsort.hxx>
 #include <algorithms/insertionsort.hxx>
 #include <algorithms/introsort.hxx>
-#include <algorithms/heapsort.hxx>
 #include <algorithms/mergesort.hxx>
 #include <algorithms/pancakesort.hxx>
 #include <algorithms/quicksort.hxx>
@@ -52,95 +52,15 @@ auto main() -> int
                 },
                 sv::algorithms::bubblesort
         }},
-        { "Mergesort"s, std::tuple{ 
-                "M"s,
-                std::vector{ 
-                    " Time Complexity: O(nlog(n))"s,
-                    " Reading: Red"s,
-                    " Writing: Blue"s,
-                    " Left Bound: Cyan"s,
-                    " Right Bound: Yellow"s
-                },
-                sv::algorithms::mergesort
-        }},
-        { "Quicksort"s, std::tuple{ 
-                "Q"s,
+        { "Bubble Sort II"s, std::tuple{ 
+                "Ctrl + B"s,
                 std::vector{
-                    " Time Complexity: O(nlog(n))"s,
-                    " Reading: Red"s,
-                    " Swapping: Blue"s,
-                    " Pivot: Green"s
-                },
-                sv::algorithms::quicksort
-        }},
-        { "Radix Sort"s, std::tuple{ 
-                "R"s,
-                std::vector{
-                    " Time Complexity: O(d*(n + b))"s,
-                    " Reading: Red"s,
-                    " Writing: Blue"s,
-                    " Find Maximum: Yellow"s
-                },
-                sv::algorithms::radixsort
-        }},
-        { "Insertion Sort"s, std::tuple{ 
-                "I"s,
-                std::vector{
-                    " Time Complexity: O(n^2)"s,
+                    " Time Complexity (Worst): O(n^2)"s,
+                    " Time Complexity (Best): O(n)"s,
                     " Reading: Red"s,
                     " Writing: Blue"s
                 },
-                sv::algorithms::insertionsort
-        }},
-        { "Selection Sort"s, std::tuple{ 
-                "S"s,
-                std::vector{
-                    " Time Complexity: O(n^2)"s,
-                    " Writing: Blue"s,
-                    " Finding Minimum: Yellow"s
-                },
-                sv::algorithms::selectionsort
-        }},
-        { "Pancake Sort"s, std::tuple{ 
-                "P"s,
-                std::vector{
-                    " Time Complexity: O(n^2)"s,
-                    " Reverse Swap: Blue"s,
-                    " Finding Minimum: Yellow"s
-                },
-                sv::algorithms::pancakesort
-        }},
-        { "Heapsort"s, std::tuple{ 
-                "H"s,
-                std::vector{
-                    " Time Complexity: O(nlog(n))"s,
-                    " Heap Levels: Random Colors"s,
-                    " Swapping: Magenta"s
-                },
-                sv::algorithms::heapsort
-        }},
-        { "Introsort"s, std::tuple{ 
-                "Shift + I"s,
-                std::vector{
-                    " Time Complexity: O(nlog(n))"s,
-                    " Quick Reading: Red"s,
-                    " Quick Swapping: Blue"s,
-                    " Quick Pivot: Green"s,
-                    " Insertion Reading: Yellow"s,
-                    " Insertion Writing: Cyan"s,
-                    " Heap Levels: Random Colors"s,
-                    " Heap Swapping: Magenta"s
-                },
-                sv::algorithms::introsort
-        }},
-        { "Shell Sort"s, std::tuple{ 
-                "Shift + S"s,
-                std::vector{
-                    " Time Complexity: O(n^2)"s,
-                    " Reading: Red"s,
-                    " Writing: Blue"s
-                },
-                sv::algorithms::shellsort
+                sv::algorithms::bubblesortII
         }},
         { "Bucket Sort"s, std::tuple{ 
                 "Shift + B"s,
@@ -164,15 +84,95 @@ auto main() -> int
                 },
                 sv::algorithms::countingsort
         }},
-        { "Bubble Sort II"s, std::tuple{ 
-                "Ctrl + B"s,
+        { "Heapsort"s, std::tuple{ 
+                "H"s,
                 std::vector{
-                    " Time Complexity (Worst): O(n^2)"s,
-                    " Time Complexity (Best): O(n)"s,
+                    " Time Complexity: O(nlog(n))"s,
+                    " Heap Levels: Random Colors"s,
+                    " Swapping: Magenta"s
+                },
+                sv::algorithms::heapsort
+        }},
+        { "Insertion Sort"s, std::tuple{ 
+                "I"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
                     " Reading: Red"s,
                     " Writing: Blue"s
                 },
-                sv::algorithms::bubblesortII
+                sv::algorithms::insertionsort
+        }},
+        { "Introsort"s, std::tuple{ 
+                "Shift + I"s,
+                std::vector{
+                    " Time Complexity: O(nlog(n))"s,
+                    " Quick Reading: Red"s,
+                    " Quick Swapping: Blue"s,
+                    " Quick Pivot: Green"s,
+                    " Insertion Reading: Yellow"s,
+                    " Insertion Writing: Cyan"s,
+                    " Heap Levels: Random Colors"s,
+                    " Heap Swapping: Magenta"s
+                },
+                sv::algorithms::introsort
+        }},
+        { "Mergesort"s, std::tuple{ 
+                "M"s,
+                std::vector{ 
+                    " Time Complexity: O(nlog(n))"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s,
+                    " Left Bound: Cyan"s,
+                    " Right Bound: Yellow"s
+                },
+                sv::algorithms::mergesort
+        }},
+        { "Pancake Sort"s, std::tuple{ 
+                "P"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Reverse Swap: Blue"s,
+                    " Finding Minimum: Yellow"s
+                },
+                sv::algorithms::pancakesort
+        }},
+        { "Quicksort"s, std::tuple{ 
+                "Q"s,
+                std::vector{
+                    " Time Complexity: O(nlog(n))"s,
+                    " Reading: Red"s,
+                    " Swapping: Blue"s,
+                    " Pivot: Green"s
+                },
+                sv::algorithms::quicksort
+        }},
+        { "Radix Sort"s, std::tuple{ 
+                "R"s,
+                std::vector{
+                    " Time Complexity: O(d*(n + b))"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s,
+                    " Find Maximum: Yellow"s
+                },
+                sv::algorithms::radixsort
+        }},
+        { "Selection Sort"s, std::tuple{ 
+                "S"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Writing: Blue"s,
+                    " Finding Minimum: Yellow"s
+                },
+                sv::algorithms::selectionsort
+        }},
+        { "Shell Sort"s, std::tuple{ 
+                "Shift + S"s,
+                std::vector{
+                    " Time Complexity: O(n^2)"s,
+                    " Reading: Red"s,
+                    " Writing: Blue"s
+                },
+                sv::algorithms::shellsort
         }},
         { "Timsort"s, std::tuple{ 
                 "T"s,
